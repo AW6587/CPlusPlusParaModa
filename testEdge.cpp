@@ -1,3 +1,6 @@
+//#define TEST_EDGE
+#ifdef TEST_EDGE
+
 #include <iostream>
 #include <string>
 #include "edge.h"
@@ -22,3 +25,4 @@ int main()
 	cout << c.ToString() << endl;
 	cout << d.ToString() << endl;
 }
+#endif
