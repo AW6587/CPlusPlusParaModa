@@ -20,7 +20,7 @@ public:
 	std::vector<TVertex> GetNeighbors(TVertex vertex);
 	std::vector<TVertex> GetNodesSortedByDegree(int count);
 	std::vector<int> GetReverseDegreeSequence();
-	std::map<TVertex, std::vector<TVertex> > Clone();
+	UndirectedGraph<TVertex> Clone();
 	std::string ToString();
 	bool RemoveVertex(TVertex v);
 	void Clear();
