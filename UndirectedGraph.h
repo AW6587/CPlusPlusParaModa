@@ -29,7 +29,7 @@ public:
 	bool ContainsEdge(TVertex source, TVertex target);
 	bool AddVerticesAndEdge(TVertex source, TVertex target);
 	bool AddVerticesAndEdge(Edge<TVertex> edge);
-	int AddVerticesAndEdgeRange(std::iterator<Edge<TVertex>, std::input_iterator_tag> edges);
+	int AddVerticesAndEdgeRange(std::vector<Edge<TVertex> > edges);
 	int GetDegree(TVertex v);
 	
 	
