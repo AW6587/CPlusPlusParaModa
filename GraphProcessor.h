@@ -1,8 +1,12 @@
 #ifndef __GRAPH_PROCESSOR_H
 #define __GRAPH_PROCESSOR_H
 
+#include <sstream>
+
 namespace GraphProcessor
 {
+	// this only works if T is an int. Specialized versions of this template will be needed
+	// if we need to use it with other types.
 	template<class T>
 	inline string LoadGraph(string filename, UndirectedGraph<T> *newGraphInstance)
 	{
@@ -19,28 +23,45 @@ namespace GraphProcessor
 			inFile.close();
 		}; 
 		
-		vector<string> tmp;		
-		T temp_node;
-		T temp_node2;
-		
+		clock_t timer = clock();
 		for(auto & line : lines)
 		{
+			vector<string> tmp;		
 			if(line.at(0) == '#')
 			{
 				continue;
 			}
-			tmp = 
-			// if (line.StartsWith("#")) continue;
-            //     tmp = line.Split(new string[] { " ", "\t" }, StringSplitOptions.None);
-            //     temp_node = (T)Convert.ChangeType(tmp[0], typeof(T));
-            //     temp_node2 = (T)Convert.ChangeType(tmp[1], typeof(T));
-			// 
-            //     newGraphInstance.AddVerticesAndEdge(new Edge<T>(temp_node, temp_node2));
+			
+			//line separate tmp into an array of strings. One string for each vertex.
+			string token;
+			istringstream tokenStream(line);
+			while (std::getline(tokenStream, token, '\t'))
+			{
+				tmp.push_back(token);
+			}
+
+			newGraphInstance->AddVerticesAndEdge(Edge<T>(stoi(tmp[0]), stoi(tmp[1])));
+			
 		}
-		return "0";
+		ostringstream ss;
+		int nodeCount = newGraphInstance->VertexCount();
+        int edgeCount = newGraphInstance->EdgeCount();
+        double inv = (nodeCount * nodeCount * 1.0) / edgeCount;
+        int sparse = inv > 64;
+		ostringstream invDeg;
+		invDeg << inv << " (" << (inv > 64 ? "Sparse" : "Dense") << " Graph)";
+		
+		ss << "\tFile loaded: " << filename << "\n\nNumber of lines in file:\t"; 
+		ss << edgeCount << "\nNumber of nodes:\t\t" << nodeCount;
+		ss << "\nInv Degree:\t" << invDeg.str() << "\nTime Taken to Process:\t";
+		ss << clock() - timer << "ms";
+		
+		return ss.str();
+		
 	}
 	
-	UndirectedGraph<int> LoadGraph(std::string filename, bool isQueryGraph = false);
+	// requires implementation of queryGraph
+	// inline UndirectedGraph<int> LoadGraph(std::string filename, bool isQueryGraph = false);
 }
 
 #endif
