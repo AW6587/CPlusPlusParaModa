@@ -1,6 +1,7 @@
 #include <map>
 #include <iostream>
 #include <vector>
+#include <fstream>
 #include "edge.h"
 #include "UndirectedGraph.h"
 
@@ -396,4 +397,21 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdgeStraight(Edge<TVertex> edge)
 	
 	edgeCount++;
 	return true;
+}
+
+template <class TVertex>
+void UndirectedGraph<TVertex>::readFile(string fileName)
+{
+    ifstream theFile(fileName);
+    if(!theFile.is_open()){
+        std::cout << "failed" << std::endl;
+        return;
+    }
+    TVertex start;
+    TVertex end;
+    while(theFile >> start >> end){
+        //std::cout << start << " " << end << " " << edge << std::endl; // test
+        this->AddVerticesAndEdge(start, end);
+    }
+    theFile.close();
 }

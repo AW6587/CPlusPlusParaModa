@@ -10,7 +10,7 @@ private:
 	 bool AddVerticesAndEdgeStraight(Edge<TVertex> edge);
 	 
 public:
-	
+    void readFile(string fileName);
 	UndirectedGraph();
 	UndirectedGraph(bool allowParallelEdges);
 	int VertexCount();

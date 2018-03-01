@@ -1,4 +1,4 @@
-// #define TEST_UNDIRECTED_GRAPH
+#define TEST_UNDIRECTED_GRAPH
 #ifdef TEST_UNDIRECTED_GRAPH
 
 #include <iostream>
@@ -126,5 +126,12 @@ int main()
 	b.AddVerticesAndEdgeRange(edgeList);
 	cout << "B after:" << endl;
 	cout << b.ToString() << endl;
+    cout << "test read file:" << endl;
+    UndirectedGraph<int> e;
+    e.readFile("/Users/huangxiao/Desktop/483/ParaMODA-master/ParaMODA/SampleInputGraph.txt");
+    cout << e.ToString() << endl;
+    
+
+    
 }
 #endif
