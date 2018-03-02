@@ -2,13 +2,13 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
-//#include "MODATest.h"
-#define NDEBUG   // comment out for cmd line inputs
+#include "MODATest.h"
+#define DEBUG TRUE   // comment out for cmd line inputs
 using namespace std;
 
 int main(int argc, char *argv[])
 {
-#if DEBUG
+#if DEBUG == TRUE
     string argsStr = "";
     argsStr = "runall -g ..\\SampleInputGraph.txt -n 5 -k"; // -k uses expansion tree
     ////argsStr = @"runall -g ..\Release\Inputs\Ecoli20141001CR_idx.txt -n 5"; // -k uses expansion tree
@@ -19,10 +19,11 @@ int main(int argc, char *argv[])
     cout << "args = ";
     for(int i = 0; i < args.size(); i++)
     {
-            cout << args[i];
+            cout << args[i] << " ";
     }
+	cout << endl;
 #endif
-    //MODATest.Run(args);
+    MODATest::Run(args);
 #if DEBUG
     //Console.ReadKey();
 #endif
