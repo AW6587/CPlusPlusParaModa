@@ -43,3 +43,4 @@ class Mapping
 
 		string ToString();
 };
+#include "Mapping.cpp"
