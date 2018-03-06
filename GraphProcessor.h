@@ -1,7 +1,12 @@
 #ifndef __GRAPH_PROCESSOR_H
 #define __GRAPH_PROCESSOR_H
 
+#include <string>
 #include <sstream>
+#include <experimental/filesystem>
+#include <vector>
+namespace fs = std::experimental::filesystem;
+#include "QueryGraph.h"
 
 namespace GraphProcessor
 {
@@ -11,9 +16,9 @@ namespace GraphProcessor
 	inline string LoadGraph(string filename, UndirectedGraph<T> *newGraphInstance)
 	{
 		vector<string> lines;
-		
+
 		string line;
-		ifstream inFile (filename);
+		std::ifstream inFile (filename);
 		if (inFile.is_open())
 		{
 			while ( getline (inFile,line) )
@@ -21,27 +26,27 @@ namespace GraphProcessor
 				lines.push_back(line);
 			}
 			inFile.close();
-		}; 
-		
+		};
+
 		clock_t timer = clock();
 		for(auto & line : lines)
 		{
-			vector<string> tmp;		
+			vector<string> tmp;
 			if(line.at(0) == '#')
 			{
 				continue;
 			}
-			
+
 			//line separate tmp into an array of strings. One string for each vertex.
 			string token;
-			istringstream tokenStream(line);
+			std::istringstream tokenStream(line);
 			while (std::getline(tokenStream, token, '\t'))
 			{
 				tmp.push_back(token);
 			}
 
-			newGraphInstance->AddVerticesAndEdge(Edge<T>(stoi(tmp[0]), stoi(tmp[1])));
-			
+			newGraphInstance->AddVerticesAndEdge(Edge<T>(std::stoi(tmp[0]), std::stoi(tmp[1])));
+
 		}
 		ostringstream ss;
 		int nodeCount = newGraphInstance->VertexCount();
@@ -50,18 +55,64 @@ namespace GraphProcessor
         int sparse = inv > 64;
 		ostringstream invDeg;
 		invDeg << inv << " (" << (inv > 64 ? "Sparse" : "Dense") << " Graph)";
-		
-		ss << "\tFile loaded: " << filename << "\n\nNumber of lines in file:\t"; 
+
+		ss << "\tFile loaded: " << filename << "\n\nNumber of lines in file:\t";
 		ss << edgeCount << "\nNumber of nodes:\t\t" << nodeCount;
 		ss << "\nInv Degree:\t" << invDeg.str() << "\nTime Taken to Process:\t";
 		ss << clock() - timer << "ms";
-		
+
 		return ss.str();
-		
+
 	}
-	
-	// requires implementation of queryGraph
-	// inline UndirectedGraph<int> LoadGraph(std::string filename, bool isQueryGraph = false);
+
+	// returns UndirectedGraph pointer
+	// ModaTest writer will need to handle a pointer because C++ does
+	// not allow passing by reference for objects
+	inline UndirectedGraph<int> *LoadGraph(string filename, bool isQueryGraph = false)
+	{
+		vector<string> lines;
+		string line;
+		std::ifstream inFile (filename);
+		if (inFile.is_open())
+		{
+			while ( getline(inFile,line) )
+			{
+				lines.push_back(line);
+			}
+			inFile.close();
+		}
+
+		UndirectedGraph<int> *newGraphInstance;
+		if (isQueryGraph)
+		{
+			//string testFile = "testFile";
+			//*newGraphInstance = new QueryGraph(testFile);
+			newGraphInstance = new QueryGraph((fs::path(filename).stem()).string()) { };
+		}
+		else
+		{
+			newGraphInstance = new UndirectedGraph<int>();
+		}
+		vector<string> tmp;
+		for (auto line : lines)
+		{
+			if (line.at(0) == '#')
+			{
+				continue;
+			}
+			//line separate tmp into an array of strings. One string for each vertex.
+			string token;
+			std::istringstream tokenStream(line);
+			while (std::getline(tokenStream, token, '\t'))
+			{
+				tmp.push_back(token);
+			}
+			newGraphInstance->AddVerticesAndEdge(std::stoi(tmp[0]), std::stoi(tmp[1]));
+		}
+
+		return newGraphInstance;
+	}
 }
 
 #endif
+
