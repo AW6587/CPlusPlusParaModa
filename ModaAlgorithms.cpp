@@ -46,11 +46,11 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
     int numIterations = -1;
     if (inputGraph.VertexCount() < 121) numIterations = inputGraph.VertexCount();
     
-    if (qGraph == nullptr) // Use MODA's expansion tree
+    if (qGraph == NULL) // Use MODA's expansion tree
     {
         //C# hash set to c++ unordered_set
         unordered_set<QueryGraph> treatedNodes = new unordered_set<QueryGraph>();
-        allMappings = new map<QueryGraph, string>(_builder.NumberOfQueryGraphs());
+        allMappings = new map<QueryGraph, string>(_builder.NumberOfQueryGraphs);
         
         do
         {
@@ -417,7 +417,7 @@ unordered_set<Mapping> ModaAlgorithms::GetSet(Dictionary<int[], vector<Mapping>>
     //    }
     //    theMappings.Remove(set);
     //}
-    theMappings.Clear(); // = null;
+    delete theMappings; // = null;
     return toReturn;
 }
 
