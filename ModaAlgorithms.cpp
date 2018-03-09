@@ -4,19 +4,20 @@
 //  Copyright © 2018 martin. All rights reserved.
 //
 
+#include <unordered_set>
+#include <vector>
 #include "ModaAlgorithms.h"
 #include "edge.h"
 #include "UndirectedGraph.h"
 #include "Mapping.h"
 #include "QueryGraph.h"
-#include <unordered_set>
-#include <vector>
+#include "ExpansionTreeBuilder.h"
 using namespace std;
 
 //Constructor
-ModaAlgorithms::ModaAlgorithms(){
+ModaAlgorithms::ModaAlgorithms() : ExpansionTreeBuilder(3){
     //Need to implement
-    MappingNodesComparer = new MappingNodesComparer();
+    // MappingNodesComparer = new MappingNodesComparer();
 }
 
 //Build the tree
@@ -224,7 +225,3 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGrap
     Console.WriteLine("Thread {0}:\tAlgorithm 2: All tasks completed. Number of mappings found: {1}.", threadName, toReturn.Count);
     return toReturn;
 }
-
-
-
-

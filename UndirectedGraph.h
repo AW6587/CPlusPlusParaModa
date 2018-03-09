@@ -1,16 +1,19 @@
 #ifndef __UNDIRECTEDGRAPH_H
 #define __UNDIRECTEDGRAPH_H
+
+#include <map>
+#include "edge.h"
 template <class TVertex>
 class UndirectedGraph
 {
 private:
-	 bool allowParallelEdges;
-	 int edgeCount;
-	 std::map<TVertex, std::vector<TVertex>* > edges;
-	 bool AddVerticesAndEdgeStraight(Edge<TVertex> edge);
+	bool allowParallelEdges;
+	std::map<TVertex, std::vector<TVertex>* > edges;
 	 
 public:
-    void readFile(string fileName);
+	int edgeCount;
+	bool AddVerticesAndEdgeStraight(Edge<TVertex> edge);
+	void readFile(string fileName);
 	UndirectedGraph();
 	UndirectedGraph(bool allowParallelEdges);
 	int VertexCount();

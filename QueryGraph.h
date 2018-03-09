@@ -1,4 +1,6 @@
+#pragma once
 #include "UndirectedGraph.h"
+#include "Mapping.h"
 
 class QueryGraph : UndirectedGraph<int>
 {
@@ -20,4 +22,7 @@ public:
 	
     void RemoveNonApplicableMappings(vector<Mapping> mappings, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly = true);
     
+	bool AddVerticesAndEdgeRange(vector<Edge<int> > edges);
+	
+	int edgeCount();
 };

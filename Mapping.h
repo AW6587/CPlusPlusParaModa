@@ -1,3 +1,4 @@
+#pragma once
 class Mapping
 {
 	public:
@@ -43,4 +44,3 @@ class Mapping
 
 		string ToString();
 };
-#include "Mapping.cpp"

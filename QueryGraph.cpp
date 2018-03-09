@@ -151,3 +151,13 @@ void QueryGraph::RemoveNonApplicableMappings(vector<Mapping> mappings,
 {
 	//TODO: finish this
 }
+
+bool QueryGraph::AddVerticesAndEdgeRange(vector<Edge<int> > edges)
+{
+	return UndirectedGraph<int>::AddVerticesAndEdgeRange(edges);
+}
+
+int QueryGraph::edgeCount()
+{
+	return UndirectedGraph<int>::edgeCount;
+}

@@ -9,16 +9,20 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <queue>
 #include "edge.h"
 #include "UndirectedGraph.h"
 #include "Mapping.h"
 #include "QueryGraph.h"
+#include "AdjacencyGraph.h"
+#include "ExpansionTreeNode.h"
+#include "ExpansionTreeBuilder.h"
 class ModaAlgorithms
 {
 public:
     //Need to do
     //Implement the Mapping Nodes Comparer
-    friend MappingNodesComparer MappingNodesComparer;
+    // friend MappingNodesComparer MappingNodesComparer;
     ModaAlgorithms();
     
     void BuildTree(int subgraphSize);
