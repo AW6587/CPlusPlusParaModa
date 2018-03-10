@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <queue>
 #include "QueryGraph.h"
 #include "ExpansionTreeNode.h"
 
