@@ -49,7 +49,7 @@ private:
     QueryGraph GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree);
     
     //Algorithm 3
-    vector<Mapping> Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string );
+    vector<Mapping> Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string = "" );
     
     //Get set
     vector<Mapping> GetSet(map<int[], vector<Mapping>> theMappings);

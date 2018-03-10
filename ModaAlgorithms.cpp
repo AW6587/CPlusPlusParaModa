@@ -17,7 +17,7 @@ using namespace std;
 //Constructor
 ModaAlgorithms::ModaAlgorithms(){
     //Need to implement
-    // MappingNodesComparer = new MappingNodesComparer();
+    // MappingNodesComparer = new MappingNodesComparer();/Users/jjja5555/Desktop/CPlusPlusParaModa/Utils.cpp
     _builder = *new ExpansionTreeBuilder<int>(subgraphSize);
 }
 
@@ -145,7 +145,9 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
         }
         qGraph->RemoveNonApplicableMappings(mappings, inputGraph);
         
-        //var fileName = $"{mappings.Count}#{qGraph.Identifier}.ser";
+        
+        //TODO...
+        string fileName = "{mappings.Count}#{qGraph.Identifier}.ser";
         //System.IO.File.WriteAllText(fileName, Extensions.CompressString(Newtonsoft.Json.JsonConvert.SerializeObject(mappings)));
         
         if (mappings.capacity() > 0) mappings.clear();
@@ -471,14 +473,15 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> allM
     {
         parentQueryGraphEdges.insert(edge);
     }
-    Edge<int> newEdge = GetEdgeDifference(queryGraph, parentQueryGraph, parentQueryGraphEdges);
+    Edge<int> newEdge = GetEdgeDifference(*queryGraph, parentQueryGraph, parentQueryGraphEdges);
     parentQueryGraphEdges.clear();
     
     // if it's NOT a valid edge
     //source???
     if (newEdge.Source == Utils.DefaultEdgeNodeVal)
     {
-        return new Mapping[0];
+        
+        //return new Mapping[0];
         return *new vector<Mapping>;
     }
     
@@ -492,7 +495,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> allM
     //NEED TO DO
     vector<Mapping> groupByGNodes = parentGraphMappings.GroupBy(x => x.Function.Values.ToArray(), MappingNodesComparer); //.ToDictionary(x => x.Key, x => x.ToArray(), MappingNodesComparer);
     
-    for (mapping set : groupByGNodes)
+    for (Mapping set : groupByGNodes)
     {
         // function.value (= set of G nodes) are all same here. So build the subgraph here and pass it dowm
         var subgraph = Utils.GetSubgraph(inputGraph, set.Key);
