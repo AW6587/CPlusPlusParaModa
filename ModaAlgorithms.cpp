@@ -17,14 +17,14 @@ using namespace std;
 //Constructor
 ModaAlgorithms::ModaAlgorithms(){
     //Need to implement
-    // MappingNodesComparer = new MappingNodesComparer();/Users/jjja5555/Desktop/CPlusPlusParaModa/Utils.cpp
-    _builder = *new ExpansionTreeBuilder<int>(subgraphSize);
+
 }
 
 
 
 //Build the tree
 void ModaAlgorithms::BuildTree(int subgraphSize){
+    _builder = ExpansionTreeBuilder<int>(subgraphSize);
     _builder.Build();
 }
 
@@ -33,8 +33,9 @@ ExpansionTreeNode* ModaAlgorithms::GetNextNode()
 {
     if (_builder.VerticesSorted.size() > 0)
     {
-        return  _builder.VerticesSorted.front();
+        ExpansionTreeNode* temp = _builder.VerticesSorted.front();
         _builder.VerticesSorted.pop();
+        return temp;
     }
     return nullptr;
 }
@@ -442,8 +443,7 @@ vector<Mapping> ModaAlgorithms::GetSet(map<int[], vector<Mapping>> theMappings)
 
 //Algorithm 3
 
-vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string fileName = "")
-{
+vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string fileName){
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     
