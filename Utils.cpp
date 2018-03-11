@@ -8,40 +8,61 @@
 
 #include "Utils.h"
 
-MappingTestResult Utils::IsMappingCorrect(map<less<int>, int> function, vector<Edge<int>> queryGraphEdges, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly, int subGraphEdgeCount = 0)
+void clearVector(vector<int> vect, int start, int end)
 {
-    UndirectedGraph<int> subgraph = GetSubgraph(inputGraph, function.);
-    
+	for(int i = 0; i < end && i < vect.size(); i++)
+	{
+		vect[i] = 0;
+	}
+}
+
+void clearVector(vector<Edge<int> > vect, int start, int end)
+{
+	for(int i = 0; i < end && i < vect.size(); i++)
+	{
+		vect[i].Source = 0;
+		vect[i].Target = 0;
+	}
+}
+
+MappingTestResult Utils::IsMappingCorrect(map<int, int> function, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly, int subGraphEdgeCount)
+{
+	vector<int> functionValues;
+	for(auto & kv : function)
+	{
+		functionValues.push_back(kv.second);
+	}
+    UndirectedGraph<int> subgraph = GetSubgraph(inputGraph, functionValues);
+
     return IsMappingCorrect2(function, subgraph, queryGraphEdges, checkInducedMappingOnly);
 }
 
-MappingTestResult Utils::IsMappingCorrect2(map<less<int>, int> function, UndirectedGraph<int> subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
+MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGraph<int> subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
 {
     // Gather the corresponding potential images of the parentQueryGraphEdges in the input graph
     int qgLen = queryGraphEdges.capacity();
-    Edge<int>* edgeImages = new Edge<int>[qgLen];
+    vector<Edge<int> > edgeImages;
     for (int i = 0; i < qgLen; i++)
     {
         Edge<int> x = queryGraphEdges[i];
-        edgeImages[i] = *new Edge<int>(function[x.Source], function[x.Target]);
+        edgeImages.push_back(Edge<int>(function[x.Source], function[x.Target]));
     }
     MappingTestResult result;
     result.SubgraphEdgeCount = subgraph.EdgeCount();
-    
-    int compareEdgeCount = result.SubgraphEdgeCount.CompareTo(edgeImagesLength);
+
+    int compareEdgeCount = edgeImages.size() - result.SubgraphEdgeCount;
+
     if (compareEdgeCount < 0)
     {
-        delete[] edgeImages;
-        edgeImages = nullptr;
         return result;
     }
-    
+
     // if mapping is possible (=> if compareEdgeCount >= 0)
     vector<int> subgraphDegrees = subgraph.GetReverseDegreeSequence();
     int subgLen = subgraphDegrees.capacity();
     UndirectedGraph<int> testG;
     testG.AddVerticesAndEdgeRange(edgeImages);
-    var testGdeg = testG.GetReverseDegreeSequence();
+    vector<int> testGdeg = testG.GetReverseDegreeSequence();
     if (compareEdgeCount == 0)
     {
         // Same node count, same edge count
@@ -50,231 +71,278 @@ MappingTestResult Utils::IsMappingCorrect2(map<less<int>, int> function, Undirec
         {
             if (subgraphDegrees[i] != testGdeg[i])
             {
-                Array.Clear(subgraphDegrees, 0, subgLen);
-                subgraphDegrees = null;
-                Array.Clear(edgeImages, 0, qgLen);
-                edgeImages = null;
+                clearVector(subgraphDegrees, 0, subgLen);
+                clearVector(edgeImages, 0, qgLen);
                 result.IsCorrectMapping = false;
                 return result;
             }
         }
-        Array.Clear(subgraphDegrees, 0, subgLen);
-        subgraphDegrees = null;
-        Array.Clear(edgeImages, 0, qgLen);
-        edgeImages = null;
+        clearVector(subgraphDegrees, 0, subgLen);
+        clearVector(edgeImages, 0, qgLen);
         result.IsCorrectMapping = true;
         return result;
     }
-    
+
     if (compareEdgeCount > 0) //=> result.SubgraphEdgeCount > edgeImages.Count
     {
         if (checkInducedMappingOnly)
         {
-            Array.Clear(subgraphDegrees, 0, subgLen);
-            subgraphDegrees = null;
-            Array.Clear(edgeImages, 0, qgLen);
-            edgeImages = null;
+            clearVector(subgraphDegrees, 0, subgLen);
+            clearVector(edgeImages, 0, qgLen);
             result.IsCorrectMapping = false;
             return result;
         }
-        
+
         for (int i = subgLen - 1; i >= 0; i--)
         {
             if (subgraphDegrees[i] < testGdeg[i]) // base should have at least the same value as test
             {
-                Array.Clear(subgraphDegrees, 0, subgLen);
-                subgraphDegrees = null;
-                Array.Clear(edgeImages, 0, qgLen);
-                edgeImages = null;
+                clearVector(subgraphDegrees, 0, subgLen);
+                clearVector(edgeImages, 0, qgLen);
                 result.IsCorrectMapping = false;
                 return result;
             }
         }
-        Array.Clear(subgraphDegrees, 0, subgLen);
-        subgraphDegrees = null;
-        Array.Clear(edgeImages, 0, qgLen);
-        edgeImages = null;
+        clearVector(subgraphDegrees, 0, subgLen);
+        clearVector(edgeImages, 0, qgLen);
         result.IsCorrectMapping = true;
         return result;
     }
-    
+
     return result;
 }
 
-UndirectedGraph<int> Utils::GetSubgraph(UndirectedGraph<int> inputGraph, IList<int> g_nodes)
+UndirectedGraph<int> Utils::GetSubgraph(UndirectedGraph<int> inputGraph, vector<int> g_nodes)
 {
     // Remember, f(h) = g, so Function.Values is for g's
-    
+
     // Try to get all the edges in the induced subgraph made up of these g_nodes
-    var inducedSubGraphEdges = new List<Edge<int>>();
-    int subgraphSize = g_nodes.Count;
+    vector<Edge<int>> inducedSubGraphEdges;
+    int subgraphSize = g_nodes.size();
     for (int i = 0; i < subgraphSize - 1; i++)
     {
         for (int j = (i + 1); j < subgraphSize; j++)
         {
             Edge<int> edge_g;
-            if (inputGraph.TryGetEdge(g_nodes[i], g_nodes[j], out edge_g))
+            if (inputGraph.TryGetEdge(g_nodes[i], g_nodes[j], &edge_g))
             {
-                inducedSubGraphEdges.Add(edge_g);
+                inducedSubGraphEdges.push_back(edge_g);
             }
         }
     }
-    var subgraph = new UndirectedGraph<int>();
+    UndirectedGraph<int> subgraph;
     subgraph.AddVerticesAndEdgeRange(inducedSubGraphEdges);
-    inducedSubGraphEdges.Clear();
-    inducedSubGraphEdges = null;
     return subgraph;
 }
 
-Dictionary<int[], List<Mapping>> Utils::IsomorphicExtension(Dictionary<int, int> partialMap, QueryGraph queryGraph, Edge<int>[] queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
+map<vector<int>, vector<Mapping> > *Utils::IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
 {
-    if (partialMap.Count == queryGraph.VertexCount)
+    if (partialMap.size() == queryGraph.VertexCount())
     {
-#region Return base case
-        var function = new SortedList<int, int>(partialMap);
-        
-        var result = IsMappingCorrect(function, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+        map<int, int> function = partialMap;
+
+        MappingTestResult result = IsMappingCorrect(function, queryGraphEdges, inputGraph, getInducedMappingsOnly);
         if (result.IsCorrectMapping)
         {
-            return new Dictionary<int[], List<Mapping>>(1) { { function.Values.ToArray(), new List<Mapping>(1) { new Mapping(function, result.SubgraphEdgeCount) } } };
+			map<vector<int>, vector<Mapping> > * retVal = new map<vector<int>, vector<Mapping> >;
+			vector<int> * functionValues = new vector<int>;
+			for(auto & kv : function)
+			{
+				functionValues->push_back(kv.second);
+			}
+
+			vector<Mapping> * mappingsVector = new vector<Mapping>;
+			mappingsVector->push_back(Mapping(function, result.SubgraphEdgeCount));
+
+			map<vector<int>, vector<Mapping> > retValRef = *retVal;
+			vector<int> functionValuesRef = *functionValues;
+			vector<Mapping> mappingsVectorRef = *mappingsVector;
+
+			retValRef[functionValuesRef] = mappingsVectorRef;
+			return retVal;
         }
-        function.Clear();
-        function = null;
-        return null;
-#endregion
-        
+
+        return nullptr;
+
     }
-    
+
     //Remember: f(h) = g, so h is Domain and g is Range.
     //  In other words, Key is h and Value is g in the dictionary
-    
+
     // get m, most constrained neighbor
-    int m = GetMostConstrainedNeighbour(partialMap.Keys, queryGraph);
-    if (m < 0) return null;
-    
-    var listOfIsomorphisms = new Dictionary<int[], List<Mapping>>(ModaAlgorithms.MappingNodesComparer);
-    
-    var neighbourRange = ChooseNeighboursOfRange(partialMap.Values, inputGraph);
-    
-    var neighborsOfM = queryGraph.GetNeighbors(m, false);
-    var newPartialMapCount = partialMap.Count + 1;
+	vector<int> partialMapKeys;
+	for(auto & kv : partialMap)
+	{
+		partialMapKeys.push_back(kv.first);
+	}
+    int m = GetMostConstrainedNeighbour(partialMapKeys, queryGraph);
+    if (m < 0) return nullptr;
+
+	map<vector<int>, vector<Mapping> > * listOfIsomorphismsPtr = new map<vector<int>, vector<Mapping> >;
+	map<vector<int>, vector<Mapping> > listOfIsomorphisms = *listOfIsomorphismsPtr;
+
+	vector<int> partialMapValues;
+	for(auto & kv : partialMap)
+	{
+		partialMapValues.push_back(kv.second);
+	}
+    vector<int> neighbourRange = ChooseNeighboursOfRange(partialMapValues, inputGraph);
+
+    vector<int> neighborsOfM = queryGraph.GetNeighbors(m);
+    int newPartialMapCount = partialMap.size() + 1;
     //foreach neighbour n of f(D)
-    for (int i = 0; i < neighbourRange.Count; i++)
+    for (int i = 0; i < neighbourRange.size(); i++)
     {
         //int n = neighbourRange[i];
         if (false == IsNeighbourIncompatible(inputGraph, neighbourRange[i], partialMap, queryGraph, neighborsOfM))
         {
             //It's not; so, let f' = f on D, and f'(m) = n.
-            
+
             //Find all isomorphic extensions of f'.
             //newPartialMap[m] = neighbourRange[i];
-            var newPartialMap = new Dictionary<int, int>(newPartialMapCount);
-            foreach (var item in partialMap)
+            map<int, int> newPartialMap;
+            for (auto & item : partialMap)
             {
-                newPartialMap.Add(item.Key, item.Value);
+                newPartialMap[item.first] = item.second;
             }
             newPartialMap[m] = neighbourRange[i];
-            var subList = IsomorphicExtension(newPartialMap, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
-            newPartialMap.Clear();
-            newPartialMap = null;
-            if (subList != null && subList.Count > 0)
+            map<vector<int>, vector<Mapping>> * subList = IsomorphicExtension(newPartialMap, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+
+            if (subList != NULL && subList->size() > 0)
             {
-                foreach (var item in subList)
+                for (auto & item : *subList)
                 {
-                    if (item.Value.Count > 1)
+                    if (item.second.size() > 1)
                     {
-                        queryGraph.RemoveNonApplicableMappings(item.Value, inputGraph, getInducedMappingsOnly);
+                        queryGraph.RemoveNonApplicableMappings(item.second, inputGraph, getInducedMappingsOnly);
                     }
-                    List<Mapping> maps;
-                    if (listOfIsomorphisms.TryGetValue(item.Key, out maps))
-                    {
-                        maps.AddRange(item.Value);
-                    }
+                    vector<Mapping> maps;
+					/* potential segmentation fault??? */
+					if(listOfIsomorphisms[item.first].size() != 0)
+					{
+						maps = listOfIsomorphisms[item.first];
+							for(auto & i : item.second)
+							{
+								maps.push_back(i);
+							}
+					}
                     else
                     {
-                        listOfIsomorphisms[item.Key] = item.Value;
+                        listOfIsomorphisms[item.first] = item.second;
                     }
                 }
-                subList.Clear();
             }
-            subList = null;
         }
     }
-    
-    neighborsOfM = null; // DO NOT Clear this variable
-    neighbourRange.Clear();
-    neighbourRange = null;
-    return listOfIsomorphisms;
+
+    return listOfIsomorphismsPtr;
 }
 
+template <class T>
+bool ContainsValue(map<T, T> map, T value)
+{
+	for(auto & kv : map)
+	{
+		if(kv.second == value)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+template <class T>
+bool Contains(vector<T> vect, T val)
+{
+	for(auto & item : vect)
+	{
+		if(item == val)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+template <class T>
+bool tryGetValue(map<T, T> map, T value, T & target)
+{
+	for(auto & kv : map)
+	{
+		if(kv.second == value)
+		{
+			target = kv.second;
+			return true;
+		}
+	}
+	return false;
+}
 bool Utils::IsNeighbourIncompatible(UndirectedGraph<int> inputGraph,
-                             int n, Dictionary<int, int> partialMap, QueryGraph queryGraph, IList<int> neighborsOfM)
+                             int n, map<int, int> partialMap, QueryGraph queryGraph, vector<int> neighborsOfM)
 {
     //  RECALL: m is for Domain, the Key => the query graph
-    if (partialMap.ContainsValue(n))
+    if (ContainsValue(partialMap, n))
     {
         return true; // cos it's already done
     }
-    
+
     //If there is a neighbor d ∈ D of m such that n is NOT neighbors with f(d),
-    var neighboursOfN = inputGraph.GetNeighbors(n, true); // new HashSet<int>(inputGraph.GetNeighbors(n, true));
-    
+    auto neighboursOfN = inputGraph.GetNeighbors(n);
+
     bool doNext = false;
     int val; // f(d)
-    foreach (var d in neighborsOfM)
+    for (auto & d : neighborsOfM)
     {
-        if (!partialMap.TryGetValue(d, out val))
+		if(ContainsValue(partialMap, d))
+		{
+			val = partialMap[d];
+		}
+		else
+		{
+			doNext = true;
+			break;
+		}
+        if (!Contains(neighboursOfN, val))
         {
-            doNext = true;
-            break;
-        }
-        if (!neighboursOfN.Contains(val))
-        {
-            //neighboursOfN.Clear();
-            neighboursOfN = null;
             return true;
         }
     }
-    
+
     // or if there is a NON - neighbor d ∈ D of m such that n IS neighbors with f(d)
-    if (doNext && queryGraph.VertexCount > 4)
+    if (doNext && queryGraph.VertexCount() > 4)
     {
-        foreach (var d in queryGraph.Vertices.Except(neighborsOfM))
+        for (auto & d : queryGraph.Vertices())
         {
-            if (!partialMap.TryGetValue(d, out val))
-            {
-                //neighboursOfN.Clear();
-                neighboursOfN = null;
-                return false;
-            }
-            if (neighboursOfN.Contains(val))
-            {
-                //neighboursOfN.Clear();
-                neighboursOfN = null;
-                return true;
-            }
+			if(!Contains(neighborsOfM, d))
+	            if (!tryGetValue(partialMap, d, val))
+	            {
+	                return false;
+	            }
+	            if (Contains(neighboursOfN, val))
+	            {
+	                return true;
+	            }
+			}
         }
-    }
-    //neighboursOfN.Clear();
-    neighboursOfN = null;
     return false;
 }
 
-vector<int> Utils::ChooseNeighboursOfRange(IEnumerable<int> usedRange, UndirectedGraph<int> inputGraph)
+
+vector<int> Utils::ChooseNeighboursOfRange(vector<int> usedRange, UndirectedGraph<int> inputGraph)
 {
-    List<int> toReturn = new List<int>();
+    vector<int> toReturn;
     //var usedRangeSet = new HashSet<int>(usedRange);
-    foreach (var range in usedRange) //usedRangeSet)
+    for (auto & range : usedRange) //usedRangeSet)
     {
-        var local = inputGraph.GetNeighbors(range, true);
-        if (local.Count > 0)
+        auto local = inputGraph.GetNeighbors(range);
+        if (local.size() > 0)
         {
-            foreach (var loc in local)
+            for (auto & loc : local)
             {
                 //if (!usedRangeSet.Contains(loc))
-                if (!usedRange.Contains(loc))
+                if (!Contains(usedRange, loc))
                 {
-                    toReturn.Add(loc);
+                    toReturn.push_back(loc);
                 }
             }
         }
@@ -287,7 +355,7 @@ vector<int> Utils::ChooseNeighboursOfRange(IEnumerable<int> usedRange, Undirecte
     return toReturn;
 }
 
-int Utils::GetMostConstrainedNeighbour(IEnumerable<int> domain, UndirectedGraph<int> queryGraph)
+int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph)
 {
     /*
      * As is standard in backtracking searches, the algorithm uses the most constrained neighbor
@@ -297,24 +365,21 @@ int Utils::GetMostConstrainedNeighbour(IEnumerable<int> domain, UndirectedGraph<
      * the highest degree and largest neighbor degree sequence.
      * */
     //var domainDict = new HashSet<int>(domain);
-    foreach (var dom in domain) //domainDict)
+    for(auto dom : domain) //domainDict)
     {
-        var local = queryGraph.GetNeighbors(dom, false);
-        if (local.Count > 0)
+        auto local = queryGraph.GetNeighbors(dom);
+        if (local.size() > 0)
         {
-            foreach (var loc in local)
+            for (auto & loc : local)
             {
                 //if (!domainDict.Contains(loc))
-                if (!domain.Contains(loc))
+                if (!Contains(domain, loc))
                 {
                     return loc;
                 }
             }
         }
-        local = null; // DO NOT clear
     }
-    //domainDict.Clear();
-    //domainDict = null;
     return -1;
 }
 
@@ -327,7 +392,7 @@ bool Utils::CanSupport(QueryGraph queryGraph, int node_H, UndirectedGraph<int> i
     //    // That means we are not ruling out isomorphism. So...
     //    return true;
     //}
-    
+
     //return false;
     return inputGraph.GetDegree(node_G) >= queryGraph.GetDegree(node_H);
 }

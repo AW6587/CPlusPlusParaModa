@@ -8,7 +8,7 @@
 #include "Mapping.h"
 #include "QueryGraph.h"
 
-using json = nlohmann::json; 
+using json = nlohmann::json;
 using namespace std;
 
 QueryGraph::QueryGraph(string label) : UndirectedGraph<int>()
@@ -24,7 +24,7 @@ QueryGraph::QueryGraph(string label, bool allowParralelEdges) : UndirectedGraph<
 //subgraphSize defaults to -1
 bool QueryGraph::IsComplete(int subgraphSize)
 {
-	if (subgraphSize <= 1) 
+	if (subgraphSize <= 1)
 	{
 		subgraphSize = VertexCount();
 	}
@@ -34,7 +34,7 @@ bool QueryGraph::IsComplete(int subgraphSize)
 //subgraphSize defaults to -1
 bool QueryGraph::IsTree(int subgraphSize)
 {
-	if (subgraphSize <= 1) 
+	if (subgraphSize <= 1)
 	{
 		subgraphSize = VertexCount();
 	}
@@ -47,7 +47,7 @@ vector<int> numsInQuotes(string input)
 	bool inString = false;
 	stringstream ss;
 	while(input.length() > 0)
-	{	
+	{
 		if(input.at(0) == '\"')
 		{
 			if(inString == true)
@@ -79,12 +79,12 @@ vector<Mapping> QueryGraph::ReadMappingsFromFile(string filename)
 	json jsonFile;
 	i >> jsonFile;
 	vector<Mapping> mappings;
-	
+
 	for(auto & item : jsonFile)
 	{
 		Mapping temp;
 		temp.Id = item["Id"];
-		
+
 		stringstream functionSStream;
 		functionSStream << item["Function"];
 		string functionString = functionSStream.str();
@@ -93,7 +93,7 @@ vector<Mapping> QueryGraph::ReadMappingsFromFile(string filename)
 		{
 			temp.Function[integer] = item["Function"][to_string(integer)];
 		}
-		
+
 		temp.SubGraphEdgeCount = item["SubGraphEdgeCount"];
 		mappings.push_back(temp);
 	}
@@ -112,7 +112,7 @@ string QueryGraph::WriteMappingsToFile(vector<Mapping> mappings)
 
 	stringstream ss;
 	ss << "[";
-	
+
 	int mappingCount = 0;
 	for(auto & mapping : mappings)
 	{
@@ -127,7 +127,7 @@ string QueryGraph::WriteMappingsToFile(vector<Mapping> mappings)
 			if(itemCount < mapping.Function.size())
 			{
 				ss << ",";
-			} 
+			}
 		}
 		ss << "}";
 		ss << ",\"SubGraphEdgeCount\":" << mapping.SubGraphEdgeCount << "}";
@@ -137,16 +137,16 @@ string QueryGraph::WriteMappingsToFile(vector<Mapping> mappings)
 		}
 	}
 	ss << "]";
-	
+
 	ofstream outfile;
 	outfile.open(fileName.str());
 	outfile << ss.rdbuf();
 	outfile.close();
-	
+
 	return fileName.str();
 }
 
-void QueryGraph::RemoveNonApplicableMappings(vector<Mapping> mappings, 
+void QueryGraph::RemoveNonApplicableMappings(vector<Mapping> mappings,
 	UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly)
 {
 	//TODO: finish this
@@ -160,4 +160,24 @@ bool QueryGraph::AddVerticesAndEdgeRange(vector<Edge<int> > edges)
 int QueryGraph::edgeCount()
 {
 	return UndirectedGraph<int>::edgeCount;
+}
+
+int QueryGraph::VertexCount()
+{
+	return UndirectedGraph<int>::VertexCount();
+}
+
+vector<int> QueryGraph::GetNeighbors(int vertex)
+{
+	return UndirectedGraph<int>::GetNeighbors(vertex);
+}
+
+vector<int> QueryGraph::Vertices()
+{
+	return UndirectedGraph<int>::Vertices();
+}
+
+int QueryGraph::GetDegree(int v)
+{
+	return UndirectedGraph<int>::GetDegree(v);
 }

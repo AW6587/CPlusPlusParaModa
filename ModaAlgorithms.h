@@ -43,16 +43,16 @@ private:
     ExpansionTreeNode* GetNextNode();
     
     //Get edge difference
-    Edge<int> GetEdgeDifference(QueryGraph currentQueryGraph, QueryGraph parentQueryGraph, unordered_set<Edge<int>> parentQueryGraphEdges);
+    static Edge<int> GetEdgeDifference(QueryGraph currentQueryGraph, QueryGraph parentQueryGraph, unordered_set<Edge<int>> parentQueryGraphEdges);
     
     //Get Parent query node
     QueryGraph GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree);
     
     //Algorithm 3
-    vector<Mapping> Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string = "" );
+    static vector<Mapping> Algorithm3(map<QueryGraph, vector<Mapping>> allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string = "" );
     
     //Get set
-    vector<Mapping> GetSet(map<int[], vector<Mapping>> theMappings);
+    static vector<Mapping> GetSet(map<int[], vector<Mapping>> theMappings);
     
     //Algorithm2 modified
     vector<Mapping> Algorithm2_Modified(QueryGraph* queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly);
