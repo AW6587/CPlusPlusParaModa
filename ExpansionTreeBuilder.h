@@ -17,6 +17,7 @@ class ExpansionTreeBuilder
         queue<ExpansionTreeNode> VerticesSorted;
         AdjacencyGraph<ExpansionTreeNode> ExpansionTree;
 
+		ExpansionTreeBuilder();
 		ExpansionTreeBuilder(int numberOfNodes);
 		void Build();
 };

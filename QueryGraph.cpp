@@ -181,3 +181,13 @@ int QueryGraph::GetDegree(int v)
 {
 	return UndirectedGraph<int>::GetDegree(v);
 }
+
+int QueryGraph::EdgeCount()
+{
+	return UndirectedGraph<int>::EdgeCount();
+}
+
+string QueryGraph::ToString()
+{
+	return UndirectedGraph<int>::ToString();
+}
