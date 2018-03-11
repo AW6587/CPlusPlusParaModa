@@ -161,3 +161,33 @@ int QueryGraph::edgeCount()
 {
 	return UndirectedGraph<int>::edgeCount;
 }
+
+int QueryGraph::VertexCount()
+{
+	return UndirectedGraph<int>::VertexCount();
+}
+
+vector<int> QueryGraph::GetNeighbors(int vertex)
+{
+	return UndirectedGraph<int>::GetNeighbors(vertex);
+}
+
+vector<int> QueryGraph::Vertices()
+{
+	return UndirectedGraph<int>::Vertices();
+}
+
+int QueryGraph::GetDegree(int v)
+{
+	return UndirectedGraph<int>::GetDegree(v);
+}
+
+int QueryGraph::EdgeCount()
+{
+	return UndirectedGraph<int>::EdgeCount();
+}
+
+string QueryGraph::ToString()
+{
+	return UndirectedGraph<int>::ToString();
+}

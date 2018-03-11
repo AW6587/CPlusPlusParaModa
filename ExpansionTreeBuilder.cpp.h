@@ -9,6 +9,13 @@
 #include "FiveNodes.h"
 
 using namespace std;
+
+template<class TVertex>
+ExpansionTreeBuilder<TVertex>::ExpansionTreeBuilder()
+{
+
+}
+
 template<class TVertex>
 ExpansionTreeBuilder<TVertex>::ExpansionTreeBuilder(int numberOfNodes)
 {
