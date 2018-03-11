@@ -9,9 +9,10 @@
 
 int main()
 {
-	UndirectedGraph<int> newGraphInstance1;
-	cout << GraphProcessor::LoadGraph("testFile.txt", &newGraphInstance1) << endl;
-	cout << newGraphInstance1.ToString() << endl;
-	
-	// UndirectedGraph<int> newGraphInstance2 = LoackGraph("testFile.txt", true);
+	// UndirectedGraph<int> newGraphInstance1;
+	// cout << GraphProcessor::LoadGraph("testFile.txt", &newGraphInstance1) << endl;
+	// cout << newGraphInstance1.ToString() << endl;
+
+	UndirectedGraph<int> newGraphInstance2 = GraphProcessor::LoadGraph("testFile.txt", true);
+	cout << newGraphInstance2.ToString() << endl;
 }
