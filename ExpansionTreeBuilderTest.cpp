@@ -1,3 +1,5 @@
+// #define DEBUG_EXPANSION_TREE
+
 #include <queue>
 #include "AdjacencyGraph.h"
 #include "ExpansionTreeBuilder.h"

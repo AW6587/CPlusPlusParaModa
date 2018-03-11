@@ -250,7 +250,6 @@ bool AdjacencyGraph<TVertex>::RemoveVertex(TVertex v)
 		{
 			for(auto & edge : *kv.second)
 			{
-				cout << "here" << endl;
 				if (edge.Target == v)
 				{
 					edgeToRemove.push_back(edge);
