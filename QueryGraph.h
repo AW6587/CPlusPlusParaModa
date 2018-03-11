@@ -2,7 +2,7 @@
 #include "UndirectedGraph.h"
 #include "Mapping.h"
 
-class QueryGraph : UndirectedGraph<int>
+class QueryGraph : public UndirectedGraph<int>
 {
 public:
 	string Identifier;
@@ -14,7 +14,7 @@ public:
 
     bool IsComplete(int subgraphSize = -1);
 
-    bool IsTree(int subgraphSize = -1);
+    const bool& IsTree(int subgraphSize = -1);
 
     vector<Mapping> ReadMappingsFromFile(string filename);
 
