@@ -13,7 +13,6 @@
 #include "QueryGraph.h"
 #include "ExpansionTreeBuilder.h"
 #include "Utils.h"
-#include "ExpansionTreeNode.h"
 #include "AdjacencyGraph.h"
 using namespace std;
 
@@ -152,6 +151,7 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
 
         //TODO...
         string fileName = "{mappings.Count}#{qGraph.Identifier}.ser";
+        
         //System.IO.File.WriteAllText(fileName, Extensions.CompressString(Newtonsoft.Json.JsonConvert.SerializeObject(mappings)));
 
         if (mappings.size() > 0) mappings.clear();
@@ -194,6 +194,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                     // Mapping module - MODA and Grockow & Kellis.
                     UndirectedGraph<int>* inputGraphClone = new UndirectedGraph<int>(inputGraph);
                     mappings = Algorithm2(qGraph, inputGraphClone, numIterations, false);
+                    //Delete inputGraphClone
                     delete inputGraphClone;
                     inputGraphClone = nullptr;
                 }
@@ -496,15 +497,14 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 
     //NEED TO DO
     // IEnumerable<IGrouping<IList<int>, Mapping>>
+    //vector of Mapping.Function.second
     map<vector<int>, vector<Mapping>> groupByGNodes;
     for (int i = 0; i < parentGraphMappings.size();i++) {
         vector<int> temp;
         for(auto const& item : parentGraphMappings[i].Function){
-            //groupByGNodes[item.second].push_back(parentGraphMappings[i]);
             temp.push_back(item.second);
             groupByGNodes.at(temp).push_back(parentGraphMappings[i]);
         }
-        //groupByGNodes[parentGraphMappings[i].Function].push_back(1);
     }
     //groupByGNodes = parentGraphMappings.GroupBy(x => x.Function.Values.ToArray(), MappingNodesComparer); //.ToDictionary(x => x.Key, x => x.ToArray(), MappingNodesComparer);
 
