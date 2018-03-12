@@ -293,8 +293,10 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
 
     int subgraphSize = queryGraph->VertexCount();
+    
     //var threadName = System.Threading.Thread.CurrentThread.ManagedThreadId;
     //Console.WriteLine("Thread {0}:\tCallingu Algo 2:\n", threadName);
+    cout << "Calling Algo 2" << endl;
     for (int i = 0; i < inputGraphDegSeq.size(); i++)
     {
         int g = inputGraphDegSeq[i];
@@ -356,6 +358,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     theMappings.clear();
 
     //Console.WriteLine("Thread {0}:\tAlgorithm 2: All tasks completed. Number of mappings found: {1}.", threadName, toReturn.Count);
+    cout << "Algorithm 2 : All tasks completed. Number of mappings found: " << toReturn.size() << endl;
     return toReturn;
 }
 
@@ -369,6 +372,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, Undi
 
     //var threadName = Thread.CurrentThread.ManagedThreadId;
     //Console.WriteLine("Thread {0}:\tCalling Algo 2-Modified:\n", threadName);
+    cout << "Calling Algo 2-Modified:" << endl;
 
     vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
     int h = queryGraph->Vertices()[0];
@@ -393,14 +397,15 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, Undi
                     }
                     //Recall: f(h) = g
                     vector<Mapping> maps;
-//                    if (theMappings.TryGetValue(item.Key, out maps))
-//                    {
-//                        maps.AddRange(item.Value);
-//                    }
-//                    else
-//                    {
-//                        theMappings[item.Key] = item.Value;
-//                    }
+                    if (theMappings.count(item.first))
+                    {
+                        //maps.AddRange(item.second);
+                        maps.insert( maps.end(), item.second.begin(), item.second.end() );
+                    }
+                    else
+                    {
+                        theMappings[item.first] = item.second;
+                    }
                 }
             }
             mappings.clear();
