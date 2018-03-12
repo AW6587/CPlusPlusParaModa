@@ -92,11 +92,15 @@ void ExpansionTreeBuilder<TVertex>::Build()
 			cerr << "Subgraph sizes below 3 and above 5 are not supported, unless you supply a query graph." << endl;
 	}
 
-	vector<ExpansionTreeNode> VerticesSorted = sortWithBFS(ExpansionTree, rootNode);
-	int count = 1;
+	vector<ExpansionTreeNode> VerticesSortedVect = sortWithBFS(ExpansionTree, rootNode);
+	for(auto & i : VerticesSortedVect)
+	{
+		VerticesSorted.push(i);
+	}
 
+	int count = 1;
 	#ifdef DEBUG_EXPANSION_TREE
-	for(auto & i : VerticesSorted)
+	for(auto & i : VerticesSortedVect)
 	{
 		cout << '[' << count++ << ']' << ": " << i.NodeName << ", " << &i << endl;
 	}
