@@ -422,6 +422,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, Undi
     vector<Mapping> toReturn = GetSet(theMappings);
     theMappings.clear();
     //Console.WriteLine("\nThread {0}:\tAlgorithm 2: All iteration tasks completed. Number of mappings found: {1}.\n", threadName, toReturn.Count);
+    cout << "Algorithm 2: All iteration tasks completed. Number of mappings found:" << toReturn.size() << endl;
     return toReturn;
 }
 
@@ -455,17 +456,14 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     Utils helper;
-    /*
-        need to do
-        string is null or white space
 
-     */
     if (!fileName.empty())
     {
         if (!allMappings->count(parentQueryGraph))
         {
             //Mapping[0]???
-            return *new vector<Mapping>;
+            vector<Mapping> output;
+            return output;
         }
     }
     else
@@ -473,7 +471,12 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
         parentGraphMappings = parentQueryGraph.ReadMappingsFromFile(fileName);
     }
 
-    if (parentGraphMappings.size() == 0) return *new vector<Mapping>;
+    if (parentGraphMappings.size() == 0)
+    {
+        //Mapping[0]???
+        vector<Mapping> output;
+        return output;
+    }
 
     int subgraphSize = int(queryGraph->VertexCount());
     vector<Edge<int>> parentQueryGraphEdges;
@@ -484,13 +487,11 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     Edge<int> newEdge = GetEdgeDifference(*queryGraph, parentQueryGraph, parentQueryGraphEdges);
     parentQueryGraphEdges.clear();
 
-    // if it's NOT a valid edge
-    //source???
     if (newEdge.Source == helper.DefaultEdgeNodeVal)
     {
-
-        //return new Mapping[0];
-        return *new vector<Mapping>;
+        //Mapping[0]???
+        vector<Mapping> output;
+        return output;
     }
 
     vector<Mapping> list;
@@ -547,14 +548,11 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
         subgraph.~UndirectedGraph();
     }
 
-    //NEED TO DO
     queryGraphEdges.clear();
-
-    //NEED TO DO
-    //var threadName = System.Threading.Thread.CurrentThread.ManagedThreadId;
 
     // Remove mappings from the parent qGraph that are found in this qGraph
     // This is because we're only interested in induced subgraphs
+    
     vector<Mapping> theRest;
     for(Mapping m : parentGraphMappings){
         if(find(list.begin(), list.end(), m) != list.end()) {
@@ -563,7 +561,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
             theRest.push_back(m);
         }
     }
-    //= parentGraphMappings.Except(list).ToList();
+    
     parentQueryGraph.RemoveNonApplicableMappings(theRest, inputGraph);
     parentGraphMappings.clear();
     for (Mapping item : theRest)
@@ -587,6 +585,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     }
 
 //   Console.WriteLine("Thread {0}:\tAlgorithm 3: All tasks completed. Number of mappings found: {1}.\n", threadName, list.Count);
+    cout << "Algorithm 3: All tasks completed. Number of mappings found:" << list.size() << endl;
     return list;
 }
 
@@ -631,9 +630,9 @@ Edge<int> ModaAlgorithms::GetEdgeDifference(QueryGraph currentQueryGraph, QueryG
     // Recall: currentQueryGraph is a super-graph of parentQueryGraph
     if ((currentQueryGraph.EdgeCount() - parentQueryGraph.EdgeCount()) != 1)
     {
-        //NEED TO DO CONSOLE OUTPUT THING
-//       Console.WriteLine("Thread {0}:\tInvalid arguments for the method: GetEdgeDifference. [currentQueryGraph.EdgeCount - parentQueryGraph.EdgeCount] = {1}.\ncurrentQueryGraph.Label = '{2}'. parentQueryGraph.Label = '{3}'."
-//                          , System.Threading.Thread.CurrentThread.ManagedThreadId, (currentQueryGraph.EdgeCount - parentQueryGraph.EdgeCount), currentQueryGraph.Identifier, parentQueryGraph.Identifier);
+        cout << "Invalid arguments for the method: GetEdgeDifference. [currentQueryGraph.EdgeCount - parentQueryGraph.EdgeCount] =" << (currentQueryGraph.EdgeCount() - parentQueryGraph.EdgeCount()) << endl;
+        cout << "currentQueryGraph.Label = " << currentQueryGraph.Identifier << endl;
+        cout << "parentQueryGraph.Label = " << parentQueryGraph.Identifier << endl;
         return Edge<int>(helper.DefaultEdgeNodeVal, helper.DefaultEdgeNodeVal);
     }
 
