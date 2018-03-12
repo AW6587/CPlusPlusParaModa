@@ -166,7 +166,7 @@ namespace MODATest
 			{
 				cout << "invalid subgraph size" << endl;
 			}
-			if (subGraphSize >= inputGraph.VertexCount())
+			if (subGraphSize <= inputGraph.VertexCount())
 			{
 				cout << "subgraph size too large for graph" << endl;
 			}
@@ -209,7 +209,6 @@ namespace MODATest
 	        ss << "-------------------------------------------\n";
 	        if (saveOutputs == false)
 	        {
-				cout << frequentSubgraphs.size() << endl;
 	            for (auto & qGraph : frequentSubgraphs)
 	            {
 					QueryGraph theQGraph = qGraph.first;
