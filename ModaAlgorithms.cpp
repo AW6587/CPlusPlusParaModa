@@ -6,6 +6,7 @@
 
 #include <unordered_set>
 #include <vector>
+#include <sstream>
 #include "ModaAlgorithms.h"
 #include "edge.h"
 #include "UndirectedGraph.h"
@@ -16,7 +17,6 @@
 #include "ExpansionTreeNode.h"
 #include "AdjacencyGraph.h"
 using namespace std;
-
 //Constructor
 ModaAlgorithms::ModaAlgorithms(){
     //Need to implement
@@ -150,14 +150,49 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
         qGraph->RemoveNonApplicableMappings(mappings, inputGraph);
 
 
-        //TODO...
-        string fileName = "{mappings.Count}#{qGraph.Identifier}.ser";
-        //System.IO.File.WriteAllText(fileName, Extensions.CompressString(Newtonsoft.Json.JsonConvert.SerializeObject(mappings)));
+        stringstream fileName;
+    	fileName << mappings.size();
+    	fileName << "#";
+    	fileName << qGraph->Identifier;
+    	fileName << ".ser";
+
+    	stringstream ss;
+    	ss << "[";
+
+    	int mappingCount = 0;
+    	for(auto & mapping : mappings)
+    	{
+    		mappingCount++;
+    		ss << "{\"Id\":" << mapping.Id << ",";
+    		ss << "\"Function\":{";
+    		int itemCount = 0;
+    		for(auto & item : mapping.Function)
+    		{
+    			itemCount++;
+    			ss << "\"" << item.first << "\":" << item.second;
+    			if(itemCount < mapping.Function.size())
+    			{
+    				ss << ",";
+    			}
+    		}
+    		ss << "}";
+    		ss << ",\"SubGraphEdgeCount\":" << mapping.SubGraphEdgeCount << "}";
+    		if(mappingCount < mappings.size())
+    		{
+    			ss << ",";
+    		}
+    	}
+    	ss << "]";
+
+    	ofstream outfile;
+    	outfile.open(fileName.str());
+    	outfile << ss.rdbuf();
+    	outfile.close();
 
         if (mappings.size() > 0) mappings.clear();
         //allMappings = new map<QueryGraph, string>(1) { { qGraph, fileName } };
         allMappings.clear();
-        allMappings[*qGraph] = fileName;
+        allMappings[*qGraph] = fileName.str();
     }
 
     return allMappings;
@@ -602,7 +637,7 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
     {
         //NEED TO DO
 //        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
-        
+
         //Find the first node with those condition
         for (ExpansionTreeNode node : expansionTree.Vertices){
             if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
