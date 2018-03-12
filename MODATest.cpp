@@ -166,7 +166,7 @@ namespace MODATest
 			{
 				cout << "invalid subgraph size" << endl;
 			}
-			if (subGraphSize <= inputGraph.VertexCount())
+			if (subGraphSize >= inputGraph.VertexCount())
 			{
 				cout << "subgraph size too large for graph" << endl;
 			}
