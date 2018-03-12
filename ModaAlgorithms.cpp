@@ -14,6 +14,7 @@
 #include "ExpansionTreeBuilder.h"
 #include "Utils.h"
 #include "ExpansionTreeNode.h"
+#include "AdjacencyGraph.h"
 using namespace std;
 
 //Constructor
@@ -597,7 +598,14 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
     if (hasNode)
     {
         //NEED TO DO
-        return expansionTree.Vertices().First(x => !x.IsRootNode && x.NodeName == queryGraph.Identifier).ParentNode.QueryGraph;
+//        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
+        
+        //Find the first node with those condition
+        for (ExpansionTreeNode node : expansionTree.Vertices){
+            if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
+                return & node.ParentNode->QueryGraph;
+            }
+        }
     }
     return nullptr;
 }
