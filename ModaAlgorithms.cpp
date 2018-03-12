@@ -76,7 +76,7 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
                 else
                 {
                     UndirectedGraph<int> *inputGraphClone = new UndirectedGraph<int>(inputGraph);
-                    mappings = Algorithm2(qGraph, inputGraphClone, numIterations, false);
+                    mappings = Algorithm2(qGraph, *inputGraphClone, numIterations, false);
                     //delete inputGraphClone;
                     inputGraphClone = nullptr;
                 }
@@ -200,11 +200,13 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
 //Algorithm 1
 map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int> inputGraph, QueryGraph* qGraph, int subgraphSize = -1, int thresholdValue = 0)
 {
+    cout << "START OF ALGO 1\n";
+    cout << "-------------------------------------------\n";
+
     // The enumeration module (Algo 3) needs the mappings generated from the previous run(s)
     map<QueryGraph, vector<Mapping>> allMappings;
     int numIterations = -1;
     if (inputGraph.VertexCount() < 121) numIterations = inputGraph.VertexCount();
-
     if (qGraph == nullptr) // Use MODA's expansion tree
     {
 //#region Use MODA's expansion tree
@@ -213,8 +215,15 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 
         do
         {
-            if(GetNextNode() != nullptr) qGraph = &GetNextNode()->QueryGraph;
-            if (qGraph == nullptr) break;
+            if(GetNextNode() != nullptr)
+            {
+                qGraph = &GetNextNode()->QueryGraph;
+            }
+            if (qGraph == nullptr)
+            {
+                break;
+            }
+
             vector<Mapping> mappings;
             if (qGraph->IsTree(subgraphSize))
             {
@@ -225,9 +234,11 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                 }
                 else
                 {
+
                     // Mapping module - MODA and Grockow & Kellis.
                     UndirectedGraph<int>* inputGraphClone = new UndirectedGraph<int>(inputGraph);
-                    mappings = Algorithm2(qGraph, inputGraphClone, numIterations, false);
+                    mappings = Algorithm2(qGraph, *inputGraphClone, numIterations, false);
+
                     //Delete inputGraphClone
                     delete inputGraphClone;
                     inputGraphClone = nullptr;
@@ -315,6 +326,8 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 
 vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGraph<int> inputGraphClone, int numberOfSamples, bool getInducedMappingsOnly)
 {
+    cout << "START OF ALGO 2\n";
+    cout << "-------------------------------------------\n";
     if (numberOfSamples <= 0) numberOfSamples = inputGraphClone.VertexCount() / 3;
 
 
@@ -322,12 +335,14 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     //Do we really need to implement the mapping nodes comparer?
     vector<int> inputGraphDegSeq = inputGraphClone.GetNodesSortedByDegree(numberOfSamples);
 
+    cout << "IS SEG FAULT??" << endl;
     //we dont have vetices and edges in our querygraph?
     int* queryGraphVertices = &queryGraph->Vertices()[0];
+    cout << "IS SEG FAULT??" << endl;
     vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
 
     int subgraphSize = queryGraph->VertexCount();
-    
+
     //var threadName = System.Threading.Thread.CurrentThread.ManagedThreadId;
     //Console.WriteLine("Thread {0}:\tCallingu Algo 2:\n", threadName);
     cout << "Calling Algo 2" << endl;
@@ -586,7 +601,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 
     // Remove mappings from the parent qGraph that are found in this qGraph
     // This is because we're only interested in induced subgraphs
-    
+
     vector<Mapping> theRest;
     for(Mapping m : parentGraphMappings){
         if(find(list.begin(), list.end(), m) != list.end()) {
@@ -595,7 +610,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
             theRest.push_back(m);
         }
     }
-    
+
     parentQueryGraph.RemoveNonApplicableMappings(theRest, inputGraph);
     parentGraphMappings.clear();
     for (Mapping item : theRest)
@@ -644,7 +659,7 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
         //Find the first node with those condition
         for (ExpansionTreeNode node : expansionTree.Vertices){
             if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
-                return & node.ParentNode->QueryGraph;
+                return &node.ParentNode->QueryGraph;
             }
         }
     }

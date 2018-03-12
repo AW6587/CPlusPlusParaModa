@@ -63,7 +63,6 @@ namespace GraphProcessor
 	inline UndirectedGraph<int> LoadGraph(std::string filename, bool isQueryGraph = false)
 	{
 	  vector<string> lines;
-
 	  string line;
 	  ifstream inFile (filename);
 	  if (inFile.is_open())
@@ -105,7 +104,6 @@ namespace GraphProcessor
 		{
 		  continue;
 		}
-		//newGraphInstance.AddVerticesAndEdge(new Edge<int>(tmp[0], tmp[1]));
 		newGraphInstance.AddVerticesAndEdge(stoi(tmp[0]), stoi(tmp[1]));
 	  }
 	  return newGraphInstance;

@@ -174,7 +174,9 @@ vector<int> QueryGraph::GetNeighbors(int vertex)
 
 vector<int> QueryGraph::Vertices()
 {
-	return UndirectedGraph<int>::Vertices();
+	vector<int> retVal = UndirectedGraph<int>::Vertices();
+	cout << "returningB" << endl;
+	return retVal;
 }
 
 int QueryGraph::GetDegree(int v)

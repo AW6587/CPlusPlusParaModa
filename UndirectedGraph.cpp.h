@@ -46,13 +46,11 @@ template <class TVertex>
 vector<TVertex> UndirectedGraph<TVertex>::Vertices()
 {
 	vector<TVertex> keys;
-	vector<int>::iterator it;
-	it = keys.begin();
-	for(auto &kv : edges) 
+	for(auto & kv : edges)
 	{
-		it = keys.begin();
-    	keys.insert(it, kv.first);
- 	} 
+		keys.push_back(kv.first);
+	}
+	cout << "returningA" << endl;
 	return keys;
 }
 
@@ -66,7 +64,7 @@ template <class TVertex>
 vector<Edge<TVertex> > UndirectedGraph<TVertex>::Edges()
 {
 	vector<Edge<TVertex> > _edges;
-	for(auto &vertsSet : edges) 
+	for(auto &vertsSet : edges)
 	{
 		if(vertsSet.second != NULL)
 		{
@@ -100,24 +98,24 @@ std::vector<TVertex> UndirectedGraph<TVertex>::GetNodesSortedByDegree(int count)
 {
 	map<TVertex, int> tempList;
 	vector<TVertex> vertices = Vertices();
-	
+
 	for(int i = vertices.size() - 1; i >= 0; i-- )
 	{
 		tempList[vertices[i]] = GetDegree(vertices[i]);
 	}
-	
+
 	std::vector<std::pair<TVertex, int>> pairs;
 	for (auto itr = tempList.begin(); itr != tempList.end(); ++itr)
 	{
 	    pairs.push_back(*itr);
 	}
-	
+
 	sort(pairs.begin(), pairs.end(), [=](std::pair<TVertex, int>& a, std::pair<TVertex, int>& b)
 	{
 	    return a.second > b.second;
 	}
 	);
-	
+
 	vector<TVertex> listToReturn;
 	for(int i = 0; i < count; i++ )
 	{
@@ -241,7 +239,7 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdge(TVertex source, TVertex target
 {
 	typename std::map<TVertex, std::vector<TVertex>*>::const_iterator gotSource = edges.find(source);
 	typename std::map<TVertex, std::vector<TVertex>*>::const_iterator gotTarget = edges.find(target);
-	
+
 	if(gotSource != edges.end())
 	{
 
@@ -253,7 +251,7 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdge(TVertex source, TVertex target
 			}
 		}
 		edges[source]->push_back(target);
-			
+
 		if(gotTarget != edges.end())
 		{
 			if(edges[target] != NULL)
@@ -279,7 +277,7 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdge(TVertex source, TVertex target
 				return false;
 			}
 		}
-		
+
 		edges[target]->push_back(source);
 		if (gotSource != edges.end())
         {
@@ -336,7 +334,7 @@ int UndirectedGraph<TVertex>::GetDegree(TVertex v)
 	{
 		return edges[v]->size();
 	}
-	else 
+	else
 	{
 		return 0;
 	}
@@ -347,10 +345,10 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdgeStraight(Edge<TVertex> edge)
 {
 	TVertex source = edge.Source;
 	TVertex target = edge.Target;
-	
+
 	typename std::map<TVertex, std::vector<TVertex>*>::const_iterator gotSource = edges.find(source);
 	typename std::map<TVertex, std::vector<TVertex>*>::const_iterator gotTarget = edges.find(target);
-	
+
 	if(gotSource != edges.end())
 	{
 		if(edges[source] != NULL)
@@ -360,9 +358,9 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdgeStraight(Edge<TVertex> edge)
 				return false;
 			}
 		}
-		
+
 		edges[source]->push_back(target);
-		
+
 		if(gotTarget != edges.end())
 		{
 			edges[target]->push_back(source);
@@ -382,9 +380,9 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdgeStraight(Edge<TVertex> edge)
 				return false;
 			}
 		}
-		
+
 		edges[target]->push_back(source);
-		
+
 		if(gotSource != edges.end())
 		{
 			edges[source]->push_back(target);
@@ -395,7 +393,7 @@ bool UndirectedGraph<TVertex>::AddVerticesAndEdgeStraight(Edge<TVertex> edge)
 			edges[source]->push_back(target);
 		}
 	}
-	
+
 	edgeCount++;
 	return true;
 }
