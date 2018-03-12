@@ -40,7 +40,7 @@ AdjacencyGraph<TVertex>::AdjacencyGraph(bool _allowParallelEdges, int _vertexCap
 template <class TVertex>
 bool AdjacencyGraph<TVertex>::ContainsVertex(TVertex v)
 {
-	if(vertexEdges[v] != NULL)
+	if(vertexEdges.count(v))
 	{
 		return true;
 	}
@@ -196,6 +196,7 @@ bool AdjacencyGraph<TVertex>::AddVertex(TVertex v)
 	}
 	if(edgeCount < edgeCapacity || edgeCapacity < 0)
 	{
+        cout << "executed" << endl;
 		edgeCount++;
 		if(vertexEdges[v] == NULL)
 		{

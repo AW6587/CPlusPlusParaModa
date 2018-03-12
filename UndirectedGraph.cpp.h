@@ -46,10 +46,12 @@ template <class TVertex>
 vector<TVertex> UndirectedGraph<TVertex>::Vertices()
 {
 	vector<TVertex> keys;
-	for(auto & kv : edges)
-	{
-		keys.push_back(kv.first);
-	}
+    cout << edges.size() << endl;
+    for(auto const & kv : edges)
+    {
+        cout << kv.first << endl;
+        keys.push_back(kv.first);
+    }
 	cout << "returningA" << endl;
 	return keys;
 }

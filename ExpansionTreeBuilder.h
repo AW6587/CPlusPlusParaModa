@@ -11,11 +11,11 @@ class ExpansionTreeBuilder
 {
 	private:
 		int _numberOfNodes;
-		vector<ExpansionTreeNode> sortWithBFS(AdjacencyGraph<ExpansionTreeNode> tree, ExpansionTreeNode root);
+		vector<ExpansionTreeNode*> sortWithBFS(AdjacencyGraph<ExpansionTreeNode*> tree, ExpansionTreeNode* root);
 	public:
-		queue<ExpansionTreeNode> VerticesSorted;
+		queue<ExpansionTreeNode*> VerticesSorted;
 		int NumberOfQueryGraphs;
-        AdjacencyGraph<ExpansionTreeNode> ExpansionTree;
+        AdjacencyGraph<ExpansionTreeNode*> ExpansionTree;
 
 		ExpansionTreeBuilder();
 		ExpansionTreeBuilder(int numberOfNodes);

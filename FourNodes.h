@@ -5,5 +5,5 @@
 
 namespace FourNodes
 {
-	ExpansionTreeNode BuildFourNodesTree(AdjacencyGraph<ExpansionTreeNode> &expansionTree);
+	ExpansionTreeNode* BuildFourNodesTree(AdjacencyGraph<ExpansionTreeNode*> expansionTree);
 }

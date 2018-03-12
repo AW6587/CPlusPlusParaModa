@@ -16,7 +16,7 @@ class AdjacencyGraph
 		int edgeCapacity = -1;
 	public:
 		AdjacencyGraph();
-
+        int getEdgeCount(){return edgeCount;};
         AdjacencyGraph(bool allowParallelEdges);
 
         AdjacencyGraph(bool allowParallelEdges, int vertexCapacity);

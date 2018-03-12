@@ -172,7 +172,8 @@ namespace MODATest
 			}
 			//TODO:
 			ModaAlgorithms.BuildTree(subGraphSize);
-			Process(action, inputGraph, nullptr, subGraphSize, false);
+            QueryGraph* qG = nullptr;
+			Process(action, inputGraph, qG, subGraphSize, false);
 			return;
 		}
 		else
@@ -198,6 +199,7 @@ namespace MODATest
 	    if (saveTempMappingsToDisk == false)
 	    {
 	        timer = clock();
+            
 	        auto frequentSubgraphs = ModaAlgorithms.Algorithm1(inputGraph, queryGraph, subGraphSize, Threshold);
 
 

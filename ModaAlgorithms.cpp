@@ -28,14 +28,16 @@ ModaAlgorithms::ModaAlgorithms(){
 void ModaAlgorithms::BuildTree(int subgraphSize){
     _builder = ExpansionTreeBuilder<int>(subgraphSize);
     _builder.Build();
+    
 }
 
 //Return TreeNode
 ExpansionTreeNode* ModaAlgorithms::GetNextNode()
 {
+    cout << _builder.VerticesSorted.size() << endl;
     if (_builder.VerticesSorted.size() > 0)
     {
-        ExpansionTreeNode* temp = & _builder.VerticesSorted.front();
+        ExpansionTreeNode* temp =  _builder.VerticesSorted.front();
         _builder.VerticesSorted.pop();
         return temp;
     }
@@ -62,6 +64,7 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
         do
         {
             //qGraph = GetNextNode()?.QueryGraph;
+            cout << (GetNextNode() != nullptr) << endl;
             if(GetNextNode() != nullptr) qGraph = &GetNextNode()->QueryGraph;
             if (qGraph == nullptr) break;
 
@@ -202,7 +205,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 {
     cout << "START OF ALGO 1\n";
     cout << "-------------------------------------------\n";
-
+    cout << _builder.NumberOfQueryGraphs << endl;
     // The enumeration module (Algo 3) needs the mappings generated from the previous run(s)
     map<QueryGraph, vector<Mapping>> allMappings;
     int numIterations = -1;
@@ -212,18 +215,20 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 //#region Use MODA's expansion tree
         unordered_set<QueryGraph, QueryGraphHasher, QueryGraphComparator> treatedNodes;
         //allMappings = new map<QueryGraph, vector<Mapping>>(_builder.NumberOfQueryGraphs);
-
         do
         {
+            cout << (GetNextNode() == nullptr) << endl;
             if(GetNextNode() != nullptr)
             {
+                cout << "-------------------------------------------\n";
                 qGraph = &GetNextNode()->QueryGraph;
+                cout << qGraph->edgeCount()<< endl;
             }
             if (qGraph == nullptr)
             {
                 break;
             }
-
+            
             vector<Mapping> mappings;
             if (qGraph->IsTree(subgraphSize))
             {
@@ -337,7 +342,12 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
 
     cout << "IS SEG FAULT??" << endl;
     //we dont have vetices and edges in our querygraph?
-    int* queryGraphVertices = &queryGraph->Vertices()[0];
+    //int* queryGraphVertices = &queryGraph->Vertices()[0];
+    cout << queryGraph->EdgeCount() << endl;
+    cout << queryGraph->Identifier << endl;
+    cout << (queryGraph == nullptr) << endl;
+    cout << queryGraph->Vertices().size()  << endl;
+    int* queryGraphVertices = &(queryGraph->Vertices())[0];
     cout << "IS SEG FAULT??" << endl;
     vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
 
@@ -399,6 +409,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     //Array.Clear(queryGraphEdges, 0, queryGraphEdges.Length); C#
     queryGraphEdges.clear();
     //Array.Clear(queryGraphVertices, 0, subgraphSize); C#
+    //queryGraphVertices.clear();
     delete queryGraphVertices;
     queryGraphVertices = nullptr;
     inputGraphDegSeq.clear();
@@ -501,7 +512,7 @@ vector<Mapping> ModaAlgorithms::GetSet(map<vector<int>, vector<Mapping>> theMapp
 
 //Algorithm 3
 
-vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string fileName){
+vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode*> expansionTree, QueryGraph parentQueryGraph, string newFileName, string fileName){
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     Utils helper;
@@ -646,10 +657,10 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 /// <param name="expansionTree"></param>
 /// <returns></returns>
 //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree)
+QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode*> expansionTree)
 {
-    ExpansionTreeNode qNode;
-    qNode.QueryGraph = *queryGraph;
+    ExpansionTreeNode* qNode = new ExpansionTreeNode;
+    qNode->QueryGraph = *queryGraph;
     bool hasNode = expansionTree.ContainsVertex(qNode);
     if (hasNode)
     {
@@ -657,9 +668,9 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
 //        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
 
         //Find the first node with those condition
-        for (ExpansionTreeNode node : expansionTree.Vertices){
-            if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
-                return &node.ParentNode->QueryGraph;
+        for (ExpansionTreeNode* node : expansionTree.Vertices){
+            if(!node->IsRootNode && node->NodeName == queryGraph->Identifier){
+                return &node->ParentNode->QueryGraph;
             }
         }
     }
