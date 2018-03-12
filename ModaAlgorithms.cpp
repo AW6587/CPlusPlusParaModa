@@ -14,6 +14,7 @@
 #include "ExpansionTreeBuilder.h"
 #include "Utils.h"
 #include "ExpansionTreeNode.h"
+#include "AdjacencyGraph.h"
 using namespace std;
 
 //Constructor
@@ -468,7 +469,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 
     if (parentGraphMappings.size() == 0) return *new vector<Mapping>;
 
-    int subgraphSize = queryGraph->VertexCount();
+    int subgraphSize = int(queryGraph->VertexCount());
     vector<Edge<int>> parentQueryGraphEdges;
     for (Edge<int> edge : parentQueryGraph.Edges())
     {
@@ -487,7 +488,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     }
 
     vector<Mapping> list;
-    int oldCount = parentGraphMappings.size();
+    int oldCount = int(parentGraphMappings.size());
     int id = 0;
     int queryGraphEdgeCount = queryGraph->EdgeCount();
     //Edge<int>[] queryGraphEdges = queryGraph.Edges().ToArray();
@@ -495,10 +496,13 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 
     //NEED TO DO
     // IEnumerable<IGrouping<IList<int>, Mapping>>
-    map<int, vector<int>> groupByGNodes;
+    map<vector<int>, vector<Mapping>> groupByGNodes;
     for (int i = 0; i < parentGraphMappings.size();i++) {
+        vector<int> temp;
         for(auto const& item : parentGraphMappings[i].Function){
-            groupByGNodes[item.first].push_back(item.second);
+            //groupByGNodes[item.second].push_back(parentGraphMappings[i]);
+            temp.push_back(item.second);
+            groupByGNodes.at(temp).push_back(parentGraphMappings[i]);
         }
         //groupByGNodes[parentGraphMappings[i].Function].push_back(1);
     }
@@ -514,7 +518,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
             // Remember, f(h) = g
 
             // if (f(u), f(v)) ϵ G and meets the conditions, add to list
-            if (item.SubGraphEdgeCount() == queryGraphEdgeCount)
+            if (item.SubGraphEdgeCount == queryGraphEdgeCount)
             {
                 MappingTestResult isMapping = helper.IsMappingCorrect2(item.Function, subgraph, queryGraphEdges, true);
                 if (isMapping.IsCorrectMapping)
@@ -523,7 +527,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
                 }
                 isMapping.~MappingTestResult();
             }
-            else if (item.SubGraphEdgeCount() > queryGraphEdgeCount)
+            else if (item.SubGraphEdgeCount > queryGraphEdgeCount)
             {
                 Edge<int> newEdgeImage = item.GetImage(inputGraph, newEdge);
 
@@ -597,7 +601,14 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
     if (hasNode)
     {
         //NEED TO DO
-        return expansionTree.Vertices().First(x => !x.IsRootNode && x.NodeName == queryGraph.Identifier).ParentNode.QueryGraph;
+//        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
+        
+        //Find the first node with those condition
+        for (ExpansionTreeNode node : expansionTree.Vertices){
+            if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
+                return & node.ParentNode->QueryGraph;
+            }
+        }
     }
     return nullptr;
 }

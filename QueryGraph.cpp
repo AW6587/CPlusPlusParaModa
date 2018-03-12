@@ -191,3 +191,17 @@ string QueryGraph::ToString()
 {
 	return UndirectedGraph<int>::ToString();
 }
+
+bool QueryGraph::operator==(const QueryGraph & other) const
+{
+	return Identifier.compare(other.Identifier) == 0 ? true : false;
+}
+
+bool QueryGraph::operator<(const QueryGraph & other) const
+{
+  string id1 = Identifier;
+  string id2 = other.Identifier;
+
+  int equality = id1.compare(id2);
+  return equality < 0;
+}

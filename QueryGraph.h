@@ -40,6 +40,8 @@ public:
 	std::string ToString();
 
 	bool operator==(const QueryGraph & other) const;
+
+	bool operator<(const QueryGraph & other) const;
 };
 
 struct QueryGraphComparator
