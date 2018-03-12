@@ -35,7 +35,7 @@ ExpansionTreeNode* ModaAlgorithms::GetNextNode()
 {
     if (_builder.VerticesSorted.size() > 0)
     {
-        ExpansionTreeNode* temp = & _builder.VerticesSorted.front();
+        ExpansionTreeNode* temp = new ExpansionTreeNode (_builder.VerticesSorted.front());
         _builder.VerticesSorted.pop();
         return temp;
     }
@@ -62,7 +62,7 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
         do
         {
             //qGraph = GetNextNode()?.QueryGraph;
-            if(GetNextNode() != nullptr) qGraph = &GetNextNode()->QueryGraph;
+            if(GetNextNode() != nullptr) qGraph = new QueryGraph(GetNextNode()->QueryGraph);
             if (qGraph == nullptr) break;
 
             vector<Mapping> mappings;
@@ -217,7 +217,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
         {
             if(GetNextNode() != nullptr)
             {
-                qGraph = &GetNextNode()->QueryGraph;
+                qGraph = new QueryGraph(GetNextNode()->QueryGraph);
             }
             if (qGraph == nullptr)
             {

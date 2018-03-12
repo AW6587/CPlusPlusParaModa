@@ -1,6 +1,6 @@
 #ifndef __UNDIRECTEDGRAPH_H
 #define __UNDIRECTEDGRAPH_H
-
+#include <vector>
 #include <map>
 #include "edge.h"
 template <class TVertex>
