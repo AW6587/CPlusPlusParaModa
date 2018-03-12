@@ -248,7 +248,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
             {
                 // Enumeration moodule - MODA
                 // This is part of Algo 3; but performance tweaks makes it more useful to get it here
-                QueryGraph *parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
+                QueryGraph * parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
                 if (parentQueryGraph->IsTree(subgraphSize))
                 {
                     treatedNodes.insert(*parentQueryGraph);
@@ -399,8 +399,8 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     //Array.Clear(queryGraphEdges, 0, queryGraphEdges.Length); C#
     queryGraphEdges.clear();
     //Array.Clear(queryGraphVertices, 0, subgraphSize); C#
-    delete queryGraphVertices;
-    queryGraphVertices = nullptr;
+    //delete queryGraphVertices;
+    //queryGraphVertices = nullptr;
     inputGraphDegSeq.clear();
 
     vector<Mapping> toReturn = GetSet(theMappings);
