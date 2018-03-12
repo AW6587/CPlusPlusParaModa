@@ -6,11 +6,9 @@
 template <class TVertex>
 class UndirectedGraph
 {
-private:
+public:
 	bool allowParallelEdges;
 	std::map<TVertex, std::vector<TVertex>* > edges;
-	 
-public:
 	int edgeCount;
 	bool AddVerticesAndEdgeStraight(Edge<TVertex> edge);
 	void readFile(string fileName);
@@ -34,8 +32,8 @@ public:
 	bool AddVerticesAndEdge(Edge<TVertex> edge);
 	int AddVerticesAndEdgeRange(std::vector<Edge<TVertex> > edges);
 	int GetDegree(TVertex v);
-	
-	
+
+
 };
 
 #include "UndirectedGraph.cpp.h"
