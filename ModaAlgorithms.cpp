@@ -250,7 +250,10 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                 // Enumeration moodule - MODA
                 // This is part of Algo 3; but performance tweaks makes it more useful to get it here
                 QueryGraph* parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
-                //cout << parentQueryGraph == nullptr << endl;
+                
+                cout << "ParentQueryGraph name: " << parentQueryGraph->Identifier << endl;
+                
+                
                 if(parentQueryGraph != nullptr){
                     if (parentQueryGraph->IsTree(subgraphSize))
                     {
@@ -511,9 +514,15 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
     vector<Mapping> parentGraphMappings;
     Utils helper;
 
-    cout << "Is File Name empty?: " << fileName.empty() <<endl;
     if (fileName.empty())
     {
+        if(parentQueryGraph == nullptr){
+            {
+                //Mapping[0]???
+                vector<Mapping> output;
+                return output;
+            }
+        }
         if (!allMappings->count(*parentQueryGraph))
         {
             //Mapping[0]???
@@ -526,7 +535,6 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
         if(parentQueryGraph != nullptr) parentGraphMappings = parentQueryGraph->ReadMappingsFromFile(fileName);
     }
 
-    cout << "parent Graph Mappings size: " << parentGraphMappings.size() << endl;
     if (parentGraphMappings.size() == 0)
     {
         //Mapping[0]???
@@ -664,8 +672,12 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
 //        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
 
         //Find the first node with those condition
+        //cout << "Vertices size: " << expansionTree.Vertices.size() << endl;
         for (auto & node : expansionTree.Vertices){
-            if(!node.IsRootNode && node.NodeName.compare(queryGraph->Identifier)){
+            //cout << node.IsRootNode << node.NodeName << queryGraph->Identifier << endl;
+            
+            if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
+                //cout << &node.ParentNode->QueryGraph << endl;
                 return &(node.ParentNode->QueryGraph);
             }
         }
