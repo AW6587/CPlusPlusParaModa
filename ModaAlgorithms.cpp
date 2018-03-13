@@ -101,7 +101,7 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
                 if (allMappings.count(*parentQueryGraph))
                 {
                     string newFileName; // for parentQueryGraph
-                    mappings = Algorithm3(nullptr, inputGraph, qGraph, _builder.ExpansionTree, *parentQueryGraph, newFileName, _filename);
+                    mappings = Algorithm3(nullptr, inputGraph, qGraph, _builder.ExpansionTree, parentQueryGraph, newFileName, _filename);
                     if (!newFileName.empty()) //C#: !string.IsNullOrWhiteSpace(newFileName)
                     {
                         // We change the _filename value in the dictionary since this means some of the mappings from parent fit the child
@@ -202,7 +202,8 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 {
     cout << "START OF ALGO 1\n";
     cout << "-------------------------------------------\n";
-
+    cout << "ExpansionTree vertex cout: " << _builder.ExpansionTree.VertexCount << endl;
+    cout << "ExpansionTree edge cout: " << _builder.ExpansionTree.EdgeCount << endl;
     // The enumeration module (Algo 3) needs the mappings generated from the previous run(s)
     map<QueryGraph, vector<Mapping>> allMappings;
     int numIterations = -1;
@@ -215,11 +216,11 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 
         do
         {
-            if(GetNextNode() != nullptr)
+            if(_builder.VerticesSorted.size() > 0)
             {
-                qGraph = new QueryGraph(GetNextNode()->QueryGraph);
-            }
-            if (qGraph == nullptr)
+                qGraph = new QueryGraph(_builder.VerticesSorted.front().QueryGraph);
+                _builder.VerticesSorted.pop();
+            }else
             {
                 break;
             }
@@ -248,13 +249,16 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
             {
                 // Enumeration moodule - MODA
                 // This is part of Algo 3; but performance tweaks makes it more useful to get it here
-                QueryGraph * parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
-                if (parentQueryGraph->IsTree(subgraphSize))
-                {
-                    treatedNodes.insert(*parentQueryGraph);
+                QueryGraph* parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
+                //cout << parentQueryGraph == nullptr << endl;
+                if(parentQueryGraph != nullptr){
+                    if (parentQueryGraph->IsTree(subgraphSize))
+                    {
+                        treatedNodes.insert(*parentQueryGraph);
+                    }
                 }
                 string file;
-                mappings = Algorithm3(&allMappings, inputGraph, qGraph, _builder.ExpansionTree, *parentQueryGraph, file);
+                mappings = Algorithm3(&allMappings, inputGraph, qGraph, _builder.ExpansionTree, parentQueryGraph, file);
             }
             if (mappings.size() > thresholdValue)
             {
@@ -295,8 +299,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
         //treatedNodes = nullptr;
 
         //assign null value to container
-    }
-    else
+    }else
     {
         vector<Mapping> mappings;
         if (UseModifiedGrochow)
@@ -501,14 +504,15 @@ vector<Mapping> ModaAlgorithms::GetSet(map<vector<int>, vector<Mapping>> theMapp
 
 //Algorithm 3
 
-vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph parentQueryGraph, string newFileName, string fileName){
+vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph* parentQueryGraph, string newFileName, string fileName){
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     Utils helper;
 
+    cout << !fileName.empty() <<endl;
     if (!fileName.empty())
     {
-        if (!allMappings->count(parentQueryGraph))
+        if (!allMappings->count(*parentQueryGraph))
         {
             //Mapping[0]???
             vector<Mapping> output;
@@ -517,7 +521,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     }
     else
     {
-        parentGraphMappings = parentQueryGraph.ReadMappingsFromFile(fileName);
+        if(parentQueryGraph != nullptr) parentGraphMappings = parentQueryGraph->ReadMappingsFromFile(fileName);
     }
 
     if (parentGraphMappings.size() == 0)
@@ -529,11 +533,11 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
 
     int subgraphSize = int(queryGraph->VertexCount());
     vector<Edge<int>> parentQueryGraphEdges;
-    for (Edge<int> edge : parentQueryGraph.Edges())
+    for (Edge<int> edge : parentQueryGraph->Edges())
     {
         parentQueryGraphEdges.push_back(edge);
     }
-    Edge<int> newEdge = GetEdgeDifference(*queryGraph, parentQueryGraph, parentQueryGraphEdges);
+    Edge<int> newEdge = GetEdgeDifference(*queryGraph, *parentQueryGraph, parentQueryGraphEdges);
     parentQueryGraphEdges.clear();
 
     if (newEdge.Source == helper.DefaultEdgeNodeVal)
@@ -611,7 +615,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
         }
     }
 
-    parentQueryGraph.RemoveNonApplicableMappings(theRest, inputGraph);
+    parentQueryGraph->RemoveNonApplicableMappings(theRest, inputGraph);
     parentGraphMappings.clear();
     for (Mapping item : theRest)
     {
@@ -625,7 +629,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>> *all
     if (!fileName.empty() && oldCount > parentGraphMappings.size())
     {
         // This means that some of the mappings from parent fit the current query graph
-        newFileName = parentQueryGraph.WriteMappingsToFile(parentGraphMappings);
+        newFileName = parentQueryGraph->WriteMappingsToFile(parentGraphMappings);
 //        try
 //        {
 //            System.IO.File.Delete(fileName);
@@ -659,7 +663,8 @@ QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<Exp
         //Find the first node with those condition
         for (ExpansionTreeNode node : expansionTree.Vertices){
             if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
-                return &node.ParentNode->QueryGraph;
+                QueryGraph* temp = new QueryGraph(node.ParentNode->QueryGraph.Identifier);
+                return temp;
             }
         }
     }

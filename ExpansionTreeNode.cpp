@@ -34,8 +34,6 @@ ExpansionTreeNode::ExpansionTreeNode() : QueryGraph("")
 {
 }
 
-
-
 bool ExpansionTreeNode::Equals(ExpansionTreeNode obj)
 {
     if (obj.IsRootNode && IsRootNode) return true;

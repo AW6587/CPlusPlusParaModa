@@ -7,6 +7,7 @@ class ExpansionTreeNode
 		bool operator==(const ExpansionTreeNode & other) const;
 		bool operator<(const ExpansionTreeNode & other) const;
 		ExpansionTreeNode();
+        ExpansionTreeNode(QueryGraph other);
 		int Level;
 		std::string NodeName;
 		ExpansionTreeNode *ParentNode;
