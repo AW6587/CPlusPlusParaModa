@@ -511,8 +511,8 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
     vector<Mapping> parentGraphMappings;
     Utils helper;
 
-    cout << !fileName.empty() <<endl;
-    if (!fileName.empty())
+    cout << "Is File Name empty?: " << fileName.empty() <<endl;
+    if (fileName.empty())
     {
         if (!allMappings->count(*parentQueryGraph))
         {
