@@ -26,7 +26,7 @@ public:
 	bool RemoveVertex(TVertex v);
 	void Clear();
 	void ClearAdjacentEdges(TVertex v);
-	bool TryGetEdge(TVertex source, TVertex target, Edge<TVertex> edge);
+	bool TryGetEdge(TVertex source, TVertex target, Edge<TVertex>& edge);
 	bool ContainsEdge(TVertex source, TVertex target);
 	bool AddVerticesAndEdge(TVertex source, TVertex target);
 	bool AddVerticesAndEdge(Edge<TVertex> edge);

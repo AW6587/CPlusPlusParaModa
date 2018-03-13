@@ -26,47 +26,55 @@ void clearVector(vector<Edge<int> > vect, int start, int end)
 
 MappingTestResult Utils::IsMappingCorrect(map<int, int> function, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly, int subGraphEdgeCount)
 {
+    //cout << inputGraph.EdgeCount() << endl
 	vector<int> functionValues;
+    
 	for(auto & kv : function)
 	{
 		functionValues.push_back(kv.second);
 	}
+    
     UndirectedGraph<int>* subgraph = GetSubgraph(inputGraph, functionValues);
-
-    return IsMappingCorrect2(function, subgraph, queryGraphEdges, checkInducedMappingOnly);
+    cout <<"Subgraph.edgecount"  << inputGraph.EdgeCount() << endl;
+    return IsMappingCorrect2(function, *subgraph, queryGraphEdges, checkInducedMappingOnly);
 }
 
-MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGraph<int> subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
+MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGraph<int>& subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
 {
+    
     // Gather the corresponding potential images of the parentQueryGraphEdges in the input graph
-    int qgLen = queryGraphEdges.size();
+    int qgLen = int(queryGraphEdges.size());
     vector<Edge<int> > edgeImages;
     for (auto const & edge : queryGraphEdges)
     {
         //Edge<int> x = queryGraphEdges[i];
         //edgeImages.push_back(Edge<int>(function[x.Source], function[x.Target]));
-        
-        try
-        {
             edgeImages.push_back(Edge<int>(function[edge.Source], function[edge.Target]));
-        }
-        catch (out_of_range)
-        {
-        }
     }
+    
+    //cout << edgeImages.size() << endl;
     MappingTestResult result;
     result.SubgraphEdgeCount = subgraph.EdgeCount();
     
+    
+    
     int compareEdgeCount = result.SubgraphEdgeCount - edgeImages.size();
-
+    
     if (compareEdgeCount < 0)
     {
+        result.IsCorrectMapping = false;
         return result;
     }
+    
+    
+    
+    
+    
 
     // if mapping is possible (=> if compareEdgeCount >= 0)
     vector<int> subgraphDegrees = subgraph.GetReverseDegreeSequence();
-    int subgLen = subgraphDegrees.size();
+    cout << subgraphDegrees.size() << endl;
+    int subgLen = int(subgraphDegrees.size());
     UndirectedGraph<int> testG;
     testG.AddVerticesAndEdgeRange(edgeImages);
     vector<int> testGdeg = testG.GetReverseDegreeSequence();
@@ -112,12 +120,13 @@ MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGra
 
 UndirectedGraph<int>* Utils::GetSubgraph(UndirectedGraph<int> inputGraph, vector<int> g_nodes)
 {
-    // Remember, f(h) = g, so Function.Values is for g's
 
-    // Try to get all the edges in the induced subgraph made up of these g_nodes
     vector<Edge<int>> inducedSubGraphEdges;
+    
     UndirectedGraph<int>* subgraph = new UndirectedGraph<int>();
-    int subgraphSize = g_nodes.size();
+    
+    int subgraphSize = int(g_nodes.size());
+    
     for (int i = 0; i < subgraphSize - 1; i++)
     {
         for (int j = (i + 1); j < subgraphSize; j++)
@@ -135,7 +144,8 @@ UndirectedGraph<int>* Utils::GetSubgraph(UndirectedGraph<int> inputGraph, vector
 
 map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
 {
-    map<vector<int>,vector<Mapping>> output;
+    
+    map<vector<int>,vector<Mapping>> listOfIsomorphisms;
     vector<int> pValues;
     vector<int> pKeys;
     for (auto const& set : partialMap)
@@ -143,20 +153,22 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
         pKeys.push_back(set.first);
         pValues.push_back(set.second);
     }
+    
+    cout << "same: " << (partialMap.size() == queryGraph.VertexCount()) << endl;
     if (partialMap.size() == queryGraph.VertexCount())
     {
         map<int, int> function = partialMap;
-
+        cout << "Funtion.size: "<< function.size() << endl;
+        
         MappingTestResult result = IsMappingCorrect(function, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+        cout << "Is Mapping correct?: " << result.IsCorrectMapping << endl;
         if (result.IsCorrectMapping)
         {
             Mapping singleValue(function,result.SubgraphEdgeCount);
             vector<Mapping> values;
             values.push_back(singleValue);
-            output[pValues] = values;
-
-
-			return output;
+            listOfIsomorphisms[pValues] = values;
+			return listOfIsomorphisms;
         }
         map<vector<int>, vector<Mapping> > null;
         return null;
@@ -168,21 +180,36 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
 
     // get m, most constrained neighbors
     int m = GetMostConstrainedNeighbour(pKeys, queryGraph);
+    //cout << m << endl;
+    //PASS
+    
+    
+    
     if (m < 0){
         map<vector<int>, vector<Mapping>> null;
         return null;
     };
 
-	map<vector<int>, vector<Mapping> > listOfIsomorphisms;
-
-    vector<int> neighbourRange = ChooseNeighboursOfRange(pValues, inputGraph);
-    vector<int> neighborsOfM = queryGraph.GetNeighbors(m);
-    int newPartialMapCount = partialMap.size() + 1;
     
-    //foreach neighbour n of f(D)
+    
+    vector<int> neighbourRange = ChooseNeighboursOfRange(pValues, inputGraph);
+    //cout << neighbourRange.size() << endl;
+    //PASS
+    
+    vector<int> neighborsOfM = queryGraph.GetNeighbors(m);
+    //cout << neighborsOfM.size() << endl;
+    //PASS
+    
+    int newPartialMapCount = partialMap.size() + 1;
+    //cout << partialMap.size() << endl;
+    
     for (int i = 0; i < neighbourRange.size(); i++)
     {
-        if (false == IsNeighbourIncompatible(inputGraph, neighbourRange[i], partialMap, queryGraph, neighborsOfM))
+        
+        //cout << IsNeighbourIncompatible(inputGraph, neighbourRange[i], partialMap, queryGraph, neighborsOfM) << endl;
+        //PASS
+        
+        if (!IsNeighbourIncompatible(inputGraph, neighbourRange[i], partialMap, queryGraph, neighborsOfM))
         {
             map<int, int> newPartialMap;
             
@@ -190,10 +217,15 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
             {
                 newPartialMap[item.first] = item.second;
             }
-            
             newPartialMap[m] = neighbourRange[i];
+            cout << newPartialMap.size()<< "," << partialMap.size() << endl;
+            //cout << newPartialMap.size() << endl;
+            //PASS
+            
             map<vector<int>, vector<Mapping>> subList = IsomorphicExtension(newPartialMap, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
-
+            newPartialMap.clear();
+            //cout << subList.size() << endl;
+            
             if (subList.size() > 0)
             {
                 for (auto & item : subList)

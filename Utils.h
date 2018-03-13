@@ -30,7 +30,7 @@ public:
     //Is mapping correct
     static MappingTestResult IsMappingCorrect(map<int, int> function, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly, int subGraphEdgeCount = 0);
     //Is mapping correct 2
-    static MappingTestResult IsMappingCorrect2(map<int, int> function, UndirectedGraph<int> subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly);
+    static MappingTestResult IsMappingCorrect2(map<int, int> function, UndirectedGraph<int>& subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly);
     
     static bool IsNeighbourIncompatible(UndirectedGraph<int> inputGraph, int n, map<int, int> partialMap, QueryGraph queryGraph, vector<int> neighborsOfM);
     
