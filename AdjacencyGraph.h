@@ -43,7 +43,7 @@ class AdjacencyGraph
 
         bool IsVerticesEmpty;
 
-        int VertexCount;
+        int VertexCount = 0;
 
         vector<TVertex> Vertices;
 
