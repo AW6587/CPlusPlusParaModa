@@ -44,6 +44,10 @@ bool AdjacencyGraph<TVertex>::ContainsVertex(TVertex v)
 	{
 		return false;
 	}
+	else if(vertexEdges[v]->size() == 0)
+	{
+		return false;
+	}
 	else
 	{
 		return true;
@@ -188,21 +192,44 @@ bool AdjacencyGraph<TVertex>::TryGetEdges(
 }
 
 template <class TVertex>
+bool AdjacencyGraph<TVertex>::exists(TVertex v)
+{
+	for(auto & kv : vertexEdges)
+	{
+		if(kv.first == v)
+		{
+			return true;
+		}
+		for(auto & i : *kv.second)
+		{
+			if(i.Source == v || i.Target == v)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+template <class TVertex>
 bool AdjacencyGraph<TVertex>::AddVertex(TVertex v)
 {
+	if(!exists(v))
+	{
+		VertexCount++;
+	}
 	if (ContainsVertex(v))
 	{
 		return false;
 	}
+
 	if(EdgeCount < edgeCapacity || edgeCapacity < 0)
 	{
-		EdgeCount++;
 		if(vertexEdges[v] == NULL)
 		{
 			vertexEdges[v] = new vector<Edge<TVertex> >;
 		}
 	}
-	VertexCount++;
 	return true;
 }
 
@@ -321,4 +348,19 @@ template <class TVertex>
 int AdjacencyGraph<TVertex>::getEdgeCount()
 {
 	return EdgeCount;
+}
+
+template <class TVertex>
+void AdjacencyGraph<TVertex>::printMap()
+{
+	for(auto & kv : vertexEdges)
+	{
+		cout << kv.first.NodeName << " ";
+		vector<Edge<TVertex> > vect = *kv.second;
+		for(auto & i : vect)
+		{
+			cout << "[" << i.Source.NodeName << "," << i.Target.NodeName << "] ";
+		}
+		cout << endl;
+	}
 }

@@ -13,8 +13,9 @@ string toLower(string input)
 	string output = "";
 	for(int i = 0; i < input.length(); i++)
 	{
-		output += putchar(tolower(input.at(i)));
+		output += tolower(input.at(i));
 	}
+	
 	return output;
 }
 

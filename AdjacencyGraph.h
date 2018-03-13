@@ -152,6 +152,9 @@ class AdjacencyGraph
 
         void Clear();
 
+		void printMap();
+
+		bool exists(TVertex v);
 };
 
 #include "AdjacencyGraph.cpp.h"
