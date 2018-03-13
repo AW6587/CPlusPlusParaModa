@@ -59,7 +59,7 @@ MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGra
 
     // if mapping is possible (=> if compareEdgeCount >= 0)
     vector<int> subgraphDegrees = subgraph.GetReverseDegreeSequence();
-    int subgLen = subgraphDegrees.capacity();
+    int subgLen = subgraphDegrees.size();
     UndirectedGraph<int> testG;
     testG.AddVerticesAndEdgeRange(edgeImages);
     vector<int> testGdeg = testG.GetReverseDegreeSequence();
@@ -135,7 +135,7 @@ UndirectedGraph<int> Utils::GetSubgraph(UndirectedGraph<int> inputGraph, vector<
     return subgraph;
 }
 
-map<vector<int>, vector<Mapping> > *Utils::IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
+map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
 {
     if (partialMap.size() == queryGraph.VertexCount())
     {
@@ -144,25 +144,25 @@ map<vector<int>, vector<Mapping> > *Utils::IsomorphicExtension(map<int, int> par
         MappingTestResult result = IsMappingCorrect(function, queryGraphEdges, inputGraph, getInducedMappingsOnly);
         if (result.IsCorrectMapping)
         {
-			map<vector<int>, vector<Mapping> > * retVal = new map<vector<int>, vector<Mapping> >;
-			vector<int> * functionValues = new vector<int>;
+			map<vector<int>, vector<Mapping> >  retVal;
+			vector<int> functionValues;
 			for(auto & kv : function)
 			{
-				functionValues->push_back(kv.second);
+				functionValues.push_back(kv.second);
 			}
 
 			vector<Mapping> * mappingsVector = new vector<Mapping>;
 			mappingsVector->push_back(Mapping(function, result.SubgraphEdgeCount));
 
-			map<vector<int>, vector<Mapping> > retValRef = *retVal;
-			vector<int> functionValuesRef = *functionValues;
+			map<vector<int>, vector<Mapping> > retValRef = retVal;
+			vector<int> functionValuesRef = functionValues;
 			vector<Mapping> mappingsVectorRef = *mappingsVector;
 
 			retValRef[functionValuesRef] = mappingsVectorRef;
 			return retVal;
         }
-
-        return nullptr;
+        map<vector<int>, vector<Mapping> > null;
+        return null;
 
     }
 
@@ -176,10 +176,13 @@ map<vector<int>, vector<Mapping> > *Utils::IsomorphicExtension(map<int, int> par
 		partialMapKeys.push_back(kv.first);
 	}
     int m = GetMostConstrainedNeighbour(partialMapKeys, queryGraph);
-    if (m < 0) return nullptr;
+    if (m < 0){
+        map<vector<int>, vector<Mapping> > null;
+        return null;
+    };
 
-	map<vector<int>, vector<Mapping> > * listOfIsomorphismsPtr = new map<vector<int>, vector<Mapping> >;
-	map<vector<int>, vector<Mapping> > listOfIsomorphisms = *listOfIsomorphismsPtr;
+	map<vector<int>, vector<Mapping> > listOfIsomorphismsPtr;
+	map<vector<int>, vector<Mapping> > listOfIsomorphisms = listOfIsomorphismsPtr;
 
 	vector<int> partialMapValues;
 	for(auto & kv : partialMap)
@@ -206,11 +209,11 @@ map<vector<int>, vector<Mapping> > *Utils::IsomorphicExtension(map<int, int> par
                 newPartialMap[item.first] = item.second;
             }
             newPartialMap[m] = neighbourRange[i];
-            map<vector<int>, vector<Mapping>> * subList = IsomorphicExtension(newPartialMap, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+            map<vector<int>, vector<Mapping>> subList = IsomorphicExtension(newPartialMap, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
 
-            if (subList != NULL && subList->size() > 0)
+            if (subList.size() > 0)
             {
-                for (auto & item : *subList)
+                for (auto & item : subList)
                 {
                     if (item.second.size() > 1)
                     {
