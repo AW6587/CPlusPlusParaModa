@@ -22,7 +22,7 @@ public:
     
     static UndirectedGraph<int> GetSubgraph(UndirectedGraph<int> inputGraph, vector<int> g_nodes);
     
-    static map<vector<int>, vector<Mapping>> *IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly);
+    static map<vector<int>, vector<Mapping>> IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly);
     
     static bool CanSupport(QueryGraph queryGraph, int node_H, UndirectedGraph<int> inputGraph, int node_G);
     //Is mapping correct

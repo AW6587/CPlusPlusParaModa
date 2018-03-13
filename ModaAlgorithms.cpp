@@ -362,7 +362,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
                 //Remember: f(h) = g, so h is Domain and g is Range
                 map<int, int> f;
                 f[h] = g;
-                map<vector<int>, vector<Mapping>> mappings = *helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraphClone, getInducedMappingsOnly);
+                map<vector<int>, vector<Mapping>> mappings = helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraphClone, getInducedMappingsOnly);
                 f.clear();
                 if (mappings.size() > 0)
                 {
@@ -437,7 +437,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, Undi
 //#region Can Support
             //Remember: f(h) = g, so h is Domain and g is Range
             f[h] = g;
-            map<vector<int>, vector<Mapping>> mappings= *helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+            map<vector<int>, vector<Mapping>> mappings= helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
             if (mappings.size() > 0)
             {
                 for (auto const& item : mappings)
