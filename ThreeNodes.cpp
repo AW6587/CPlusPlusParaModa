@@ -33,6 +33,7 @@ namespace ThreeNodes
 		nodeL1_1.Level = 1;
 		nodeL1_1.QueryGraph = qGraphL1_1;
 		nodeL1_1.NodeName = "qGraphL1_1";
+		nodeL1_1.ParentNode = &rootNode;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(rootNode, nodeL1_1));
 
@@ -48,6 +49,7 @@ namespace ThreeNodes
 		nodeL2_1.Level = 2;
 		nodeL2_1.QueryGraph = qGraphL2_1;
 		nodeL2_1.NodeName = "qGraphL2_1";
+		nodeL2_1.ParentNode = &nodeL1_1;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_1));
 

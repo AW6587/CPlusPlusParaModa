@@ -42,11 +42,13 @@ namespace FourNodes
 	    nodeL1_1.Level = 1;
 	    nodeL1_1.QueryGraph = qGraphL1_1;
 		nodeL1_1.NodeName = "qGraphL1_1";
+		nodeL1_1.ParentNode = &rootNode;
 
 		ExpansionTreeNode nodeL1_2;
 		nodeL1_2.Level = 1;
 	    nodeL1_2.QueryGraph = qGraphL1_2;
 		nodeL1_2.NodeName = "qGraphL1_2";
+		nodeL1_2.ParentNode = &rootNode;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(rootNode, nodeL1_1));
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(rootNode, nodeL1_2));
@@ -71,11 +73,13 @@ namespace FourNodes
 		nodeL2_1.Level = 2;
 		nodeL2_1.QueryGraph = qGraphL2_1;
 		nodeL2_1.NodeName = "qGraphL2_1";
+		nodeL2_1.ParentNode = &nodeL1_1;
 
 		ExpansionTreeNode nodeL2_2;
 		nodeL2_2.Level = 2;
 		nodeL2_2.QueryGraph = qGraphL2_2;
 		nodeL2_2.NodeName = "qGraphL2_2";
+		nodeL2_2.ParentNode = &nodeL1_2;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_1));
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_2));
@@ -93,6 +97,7 @@ namespace FourNodes
 		nodeL3_1.Level = 3;
 		nodeL3_1.QueryGraph = qGraphL3_1;
 		nodeL3_1.NodeName = "qGraphL3_1";
+		nodeL3_1.ParentNode = &nodeL2_1;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL2_1, nodeL3_1));
 
@@ -110,6 +115,7 @@ namespace FourNodes
 		nodeL4_1.Level = 4;
 		nodeL4_1.QueryGraph = qGraphL4_1;
 		nodeL4_1.NodeName = "qGraphL4_1";
+		nodeL4_1.ParentNode = &nodeL3_1;
 
 		expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL3_1, nodeL4_1));
 

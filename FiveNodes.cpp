@@ -50,16 +50,19 @@ namespace FiveNodes
             nodeL1_1.Level = 1;
             nodeL1_1.QueryGraph = qGraphL1_1;
 			nodeL1_1.NodeName = "qGraphL1_1";
+			nodeL1_1.ParentNode = &rootNode;
 
 			ExpansionTreeNode nodeL1_2;
             nodeL1_2.Level = 1;
             nodeL1_2.QueryGraph = qGraphL1_2;
 			nodeL1_2.NodeName = "qGraphL1_2";
+			nodeL1_2.ParentNode = &rootNode;
 
 			ExpansionTreeNode nodeL1_3;
             nodeL1_3.Level = 1;
             nodeL1_3.QueryGraph = qGraphL1_3;
 			nodeL1_3.NodeName = "qGraphL1_3";
+			nodeL1_3.ParentNode = &rootNode;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(rootNode, nodeL1_1));
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(rootNode, nodeL1_2));
@@ -77,6 +80,7 @@ namespace FiveNodes
             nodeL2_3.Level = 2;
             nodeL2_3.QueryGraph = qGraphL2_3;
 			nodeL2_3.NodeName = "qGraphL2_3";
+			nodeL2_3.ParentNode = &nodeL1_3;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_3, nodeL2_3));
 
@@ -94,6 +98,7 @@ namespace FiveNodes
             nodeL2_2.Level = 2;
             nodeL2_2.QueryGraph = qGraphL2_2;
 			nodeL2_2.NodeName = "qGraphL2_2";
+			nodeL2_2.ParentNode = &nodeL1_2;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_2, nodeL2_2));
 
@@ -111,6 +116,7 @@ namespace FiveNodes
             nodeL2_1a.Level = 2;
             nodeL2_1a.QueryGraph = qGraphL2_1a;
 			nodeL2_1a.NodeName = "qGraphL2_1a";
+			nodeL2_1a.ParentNode = &nodeL1_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_1a));
 
@@ -127,6 +133,7 @@ namespace FiveNodes
 			nodeL2_1b.Level = 2;
 			nodeL2_1b.QueryGraph = qGraphL2_1b;
 			nodeL2_1b.NodeName = "qGraphL2_1b";
+			nodeL2_1b.ParentNode = &nodeL1_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_1b));
 
@@ -144,6 +151,7 @@ namespace FiveNodes
             nodeL2_1c.Level = 2;
             nodeL2_1c.QueryGraph = qGraphL2_1c;
 			nodeL2_1c.NodeName = "qGraphL2_1c";
+			nodeL2_1c.ParentNode = &nodeL1_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL1_1, nodeL2_1c));
 
@@ -161,6 +169,7 @@ namespace FiveNodes
             nodeL3_1.Level = 3;
             nodeL3_1.QueryGraph = qGraphL3_1;
 			nodeL3_1.NodeName = "qGraphL3_1";
+			nodeL3_1.ParentNode = &nodeL2_1a;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL2_1a, nodeL3_1));
 
@@ -179,6 +188,7 @@ namespace FiveNodes
             nodeL3_2.Level = 3;
             nodeL3_2.QueryGraph = qGraphL3_2;
 			nodeL3_2.NodeName = "qGraphL3_2";
+			nodeL3_2.ParentNode = &nodeL2_2;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL2_2, nodeL3_2));
 
@@ -197,6 +207,7 @@ namespace FiveNodes
             nodeL3_3.Level = 3;
             nodeL3_3.QueryGraph = qGraphL3_3;
 			nodeL3_3.NodeName = "qGraphL3_3";
+			nodeL3_3.ParentNode = &nodeL2_3;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL2_3, nodeL3_3));
 
@@ -216,6 +227,7 @@ namespace FiveNodes
             nodeL4_1.Level = 4,
             nodeL4_1.QueryGraph = qGraphL4_1,
 			nodeL4_1.NodeName = "qGraphL4_1";
+			nodeL4_1.ParentNode = &nodeL3_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL3_1, nodeL4_1));
 
@@ -235,6 +247,7 @@ namespace FiveNodes
             nodeL4_2.Level = 4;
             nodeL4_2.QueryGraph = qGraphL4_2;
 			nodeL4_2.NodeName = "qGraphL4_2";
+			nodeL4_2.ParentNode = &nodeL3_2;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL3_2, nodeL4_2));
 
@@ -254,6 +267,7 @@ namespace FiveNodes
             nodeL4_3.Level = 4;
             nodeL4_3.QueryGraph = qGraphL4_3;
 			nodeL4_3.NodeName = "qGraphL4_3";
+			nodeL4_3.ParentNode = &nodeL3_3;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL3_3, nodeL4_3));
 
@@ -274,6 +288,7 @@ namespace FiveNodes
             nodeL5_1.Level = 5;
             nodeL5_1.QueryGraph = qGraphL5_1;
 			nodeL5_1.NodeName = "qGraphL5_1";
+			nodeL5_1.ParentNode = &nodeL4_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL4_1, nodeL5_1));
 
@@ -294,6 +309,7 @@ namespace FiveNodes
             nodeL5_2.Level = 5;
             nodeL5_2.QueryGraph = qGraphL5_2;
 			nodeL5_2.NodeName = "qGraphL5_2";
+			nodeL5_2.ParentNode = &nodeL4_2;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL4_2, nodeL5_2));
 
@@ -314,6 +330,7 @@ namespace FiveNodes
             nodeL5_3.Level = 5;
             nodeL5_3.QueryGraph = qGraphL5_3;
 			nodeL5_3.NodeName = "qGraphL5_3";
+			nodeL5_3.ParentNode = &nodeL4_3;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL4_3, nodeL5_3));
 
@@ -334,6 +351,7 @@ namespace FiveNodes
             nodeL6_1.Level = 6;
             nodeL6_1.QueryGraph = qGraphL6_1;
 			nodeL6_1.NodeName = "qGraphL6_1";
+			nodeL6_1.ParentNode = &nodeL5_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL5_1, nodeL6_1));
 
@@ -355,6 +373,7 @@ namespace FiveNodes
             nodeL6_2.Level = 6;
             nodeL6_2.QueryGraph = qGraphL6_2;
 			nodeL6_2.NodeName = "qGraphL6_2";
+			nodeL6_2.ParentNode = &nodeL5_2;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL5_2, nodeL6_2));
 
@@ -376,6 +395,7 @@ namespace FiveNodes
             nodeL6_3.Level = 6;
             nodeL6_3.QueryGraph = qGraphL6_3;
 			nodeL6_3.NodeName = "qGraphL6_3";
+			nodeL6_3.ParentNode = &nodeL5_3;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL5_3, nodeL6_3));
 
@@ -397,6 +417,7 @@ namespace FiveNodes
             nodeL7_1.Level = 7;
             nodeL7_1.QueryGraph = qGraphL7_1;
 			nodeL7_1.NodeName = "qGraphL7_1";
+			nodeL7_1.ParentNode = &nodeL6_1;
 
             expansionTree.AddVerticesAndEdge(Edge<ExpansionTreeNode>(nodeL6_2, nodeL7_1));
 
