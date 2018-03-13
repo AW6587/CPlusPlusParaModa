@@ -8,6 +8,8 @@
 #include "AdjacencyGraph.h"
 #include "ExpansionTreeNode.h"
 #include "ExpansionTreeBuilder.h"
+#include <iterator>
+#include <algorithm>
 
 class MappingTestResult{
 public:
@@ -20,7 +22,7 @@ class Utils
 public:
     const static int DefaultEdgeNodeVal = -999;
     
-    static UndirectedGraph<int> GetSubgraph(UndirectedGraph<int> inputGraph, vector<int> g_nodes);
+    static UndirectedGraph<int>* GetSubgraph(UndirectedGraph<int> inputGraph, vector<int> g_nodes);
     
     static map<vector<int>, vector<Mapping>> IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly);
     

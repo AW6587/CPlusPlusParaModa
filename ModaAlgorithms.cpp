@@ -71,12 +71,12 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
                 if (UseModifiedGrochow)
                 {
                     // Modified Mapping module - MODA and Grockow & Kellis
-                    mappings = Algorithm2_Modified(qGraph, inputGraph, numIterations, false);
+                    mappings = Algorithm2_Modified(*qGraph, inputGraph, numIterations, false);
                 }
                 else
                 {
                     UndirectedGraph<int> *inputGraphClone = new UndirectedGraph<int>(inputGraph);
-                    mappings = Algorithm2(qGraph, *inputGraphClone, numIterations, false);
+                    mappings = Algorithm2(*qGraph, *inputGraphClone, numIterations, false);
                     //delete inputGraphClone;
                     inputGraphClone = nullptr;
                 }
@@ -140,11 +140,11 @@ map<QueryGraph, string> ModaAlgorithms::Algorithm1_C(UndirectedGraph<int> inputG
         if (UseModifiedGrochow)
         {
             // Modified Mapping module - MODA and Grockow & Kellis
-            mappings = Algorithm2_Modified(qGraph, inputGraph, numIterations, true);
+            mappings = Algorithm2_Modified(*qGraph, inputGraph, numIterations, true);
         }
         else
         {
-            mappings = Algorithm2(qGraph, inputGraph, numIterations, true);
+            mappings = Algorithm2(*qGraph, inputGraph, numIterations, true);
         }
         qGraph->RemoveNonApplicableMappings(mappings, inputGraph);
 
@@ -204,6 +204,8 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
     cout << "-------------------------------------------\n";
     cout << "ExpansionTree vertex cout: " << _builder.ExpansionTree.VertexCount << endl;
     cout << "ExpansionTree edge cout: " << _builder.ExpansionTree.EdgeCount << endl;
+    cout << endl;
+    
     // The enumeration module (Algo 3) needs the mappings generated from the previous run(s)
     map<QueryGraph, vector<Mapping>> allMappings;
     int numIterations = -1;
@@ -231,14 +233,14 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                 if (UseModifiedGrochow)
                 {
                     // Modified Mapping module - MODA and Grockow & Kellis
-                    mappings = Algorithm2_Modified(qGraph, inputGraph, numIterations, false);
+                    mappings = Algorithm2_Modified(*qGraph, inputGraph, numIterations, false);
                 }
                 else
                 {
 
                     // Mapping module - MODA and Grockow & Kellis.
                     UndirectedGraph<int>* inputGraphClone = new UndirectedGraph<int>(inputGraph);
-                    mappings = Algorithm2(qGraph, *inputGraphClone, numIterations, false);
+                    mappings = Algorithm2(*qGraph, *inputGraphClone, numIterations, false);
 
                     //Delete inputGraphClone
                     delete inputGraphClone;
@@ -308,12 +310,12 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
         if (UseModifiedGrochow)
         {
             // Modified Mapping module - MODA and Grockow & Kellis
-            mappings = Algorithm2_Modified(qGraph, inputGraph, numIterations, true);
+            mappings = Algorithm2_Modified(*qGraph, inputGraph, numIterations, true);
             // mappings = ModaAlgorithm2Parallelized.Algorithm2_Modified(qGraph, inputGraph, numIterations);
         }
         else
         {
-            mappings = Algorithm2(qGraph, inputGraph, numIterations, true);
+            mappings = Algorithm2(*qGraph, inputGraph, numIterations, true);
         }
 
         qGraph->RemoveNonApplicableMappings(mappings, inputGraph);
@@ -330,7 +332,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
 
 
 
-vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGraph<int> inputGraphClone, int numberOfSamples, bool getInducedMappingsOnly)
+vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGraph<int> inputGraphClone, int numberOfSamples, bool getInducedMappingsOnly)
 {
     cout << "START OF ALGO 2\n";
     cout << "-------------------------------------------\n";
@@ -342,10 +344,10 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     vector<int> inputGraphDegSeq = inputGraphClone.GetNodesSortedByDegree(numberOfSamples);
 
     //we dont have vetices and edges in our querygraph?
-    int* queryGraphVertices = &queryGraph->Vertices()[0];
-    vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
+    int* queryGraphVertices = &queryGraph.Vertices()[0];
+    vector<Edge<int>> queryGraphEdges = queryGraph.Edges();
 
-    int subgraphSize = queryGraph->VertexCount();
+    int subgraphSize = queryGraph.VertexCount();
 
     //var threadName = System.Threading.Thread.CurrentThread.ManagedThreadId;
     //Console.WriteLine("Thread {0}:\tCallingu Algo 2:\n", threadName);
@@ -357,13 +359,13 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
         {
             int h = queryGraphVertices[j];
             Utils helper;
-            if (helper.CanSupport(*queryGraph, h, inputGraphClone, g))
+            if (helper.CanSupport(queryGraph, h, inputGraphClone, g))
             {
 //#region Can Support
                 //Remember: f(h) = g, so h is Domain and g is Range
                 map<int, int> f;
                 f[h] = g;
-                map<vector<int>, vector<Mapping>> mappings = helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraphClone, getInducedMappingsOnly);
+                map<vector<int>, vector<Mapping>> mappings = helper.IsomorphicExtension(f, queryGraph, queryGraphEdges, inputGraphClone, getInducedMappingsOnly);
                 f.clear();
                 if (mappings.size() > 0)
                 {
@@ -371,7 +373,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
                     {
                         if (item.second.size() > 1)
                         {
-                            queryGraph->RemoveNonApplicableMappings(item.second, inputGraphClone, getInducedMappingsOnly);
+                            queryGraph.RemoveNonApplicableMappings(item.second, inputGraphClone, getInducedMappingsOnly);
                         }
                         //Recall: f(h) = g
 
@@ -399,12 +401,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
         if (inputGraphClone.EdgeCount() == 0) break;
     }
 
-    //NEED TO DO
-    //Array.Clear(queryGraphEdges, 0, queryGraphEdges.Length); C#
     queryGraphEdges.clear();
-    //Array.Clear(queryGraphVertices, 0, subgraphSize); C#
-    //delete queryGraphVertices;
-    //queryGraphVertices = nullptr;
     inputGraphDegSeq.clear();
 
     vector<Mapping> toReturn = GetSet(theMappings);
@@ -416,40 +413,41 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
 }
 
 
-vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly)
+vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly)
 {
     if (numberOfSamples <= 0) numberOfSamples = inputGraph.VertexCount() / 3;
+    if (numberOfSamples <= 0) numberOfSamples = inputGraph.VertexCount();
     Utils helper;
     map<vector<int>, vector<Mapping>> theMappings;
     vector<int> inputGraphDegSeq = inputGraph.GetNodesSortedByDegree(numberOfSamples);
 
-    //var threadName = Thread.CurrentThread.ManagedThreadId;
-    //Console.WriteLine("Thread {0}:\tCalling Algo 2-Modified:\n", threadName);
     cout << "Calling Algo 2-Modified:" << endl;
 
-    vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
-    int h = queryGraph->Vertices()[0];
+    vector<Edge<int>> queryGraphEdges = queryGraph.Edges();
+    
+    int h = queryGraph.Vertices()[0];
     map<int, int> f;
     for (int i = 0; i < inputGraphDegSeq.size(); i++)
     {
         int g = inputGraphDegSeq[i];
-        if (helper.CanSupport(*queryGraph, h, inputGraph, g))
+        if (helper.CanSupport(queryGraph, h, inputGraph, g))
         {
-//#region Can Support
-            //Remember: f(h) = g, so h is Domain and g is Range
+
             f[h] = g;
-            map<vector<int>, vector<Mapping>> mappings= helper.IsomorphicExtension(f, *queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
+            map<vector<int>, vector<Mapping>> mappings= helper.IsomorphicExtension(f, queryGraph, queryGraphEdges, inputGraph, getInducedMappingsOnly);
             if (mappings.size() > 0)
             {
                 for (auto const& item : mappings)
                 {
-                    // NEED TO DO
+                    
                     if (item.second.size() > 1)
                     {
-                        queryGraph->RemoveNonApplicableMappings(item.second, inputGraph, getInducedMappingsOnly);
+                        queryGraph.RemoveNonApplicableMappings(item.second, inputGraph, getInducedMappingsOnly);
                     }
-                    //Recall: f(h) = g
+                    
+                    
                     vector<Mapping> maps;
+                    
                     if (theMappings.count(item.first))
                     {
                         //maps.AddRange(item.second);
@@ -466,15 +464,8 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph* queryGraph, Undi
         }
     }
 
-    f.clear();
-    queryGraphEdges.clear();
-    inputGraphDegSeq.clear();
-
-
 //    NEEEEEED TO DO
     vector<Mapping> toReturn = GetSet(theMappings);
-    theMappings.clear();
-    //Console.WriteLine("\nThread {0}:\tAlgorithm 2: All iteration tasks completed. Number of mappings found: {1}.\n", threadName, toReturn.Count);
     cout << "Algorithm 2: All iteration tasks completed. Number of mappings found:" << toReturn.size() << endl;
     return toReturn;
 }
@@ -509,20 +500,16 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
 
     cout << "START OF ALGO 3\n";
     cout << "-------------------------------------------\n";
-
+    cout << parentQueryGraph->Identifier << endl;
+    cout << fileName.empty() << endl;
+    cout << endl;
     newFileName = "";
     vector<Mapping> parentGraphMappings;
+    
     Utils helper;
-
+    
     if (fileName.empty())
     {
-        if(parentQueryGraph == nullptr){
-            {
-                //Mapping[0]???
-                vector<Mapping> output;
-                return output;
-            }
-        }
         if (!allMappings->count(*parentQueryGraph))
         {
             //Mapping[0]???
@@ -532,7 +519,8 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
     }
     else
     {
-        if(parentQueryGraph != nullptr) parentGraphMappings = parentQueryGraph->ReadMappingsFromFile(fileName);
+        parentGraphMappings = parentQueryGraph->ReadMappingsFromFile(fileName);
+        cout << "read file success" << endl;
     }
 
     if (parentGraphMappings.size() == 0)
@@ -544,6 +532,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
 
     int subgraphSize = int(queryGraph->VertexCount());
     vector<Edge<int>> parentQueryGraphEdges;
+    //cout << "edges!" << parentQueryGraph->EdgeCount() << endl;
     for (Edge<int> edge : parentQueryGraph->Edges())
     {
         parentQueryGraphEdges.push_back(edge);
@@ -573,7 +562,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
         vector<int> temp;
         for(auto const& item : parentGraphMappings[i].Function){
             temp.push_back(item.second);
-            groupByGNodes.at(temp).push_back(parentGraphMappings[i]);
+            groupByGNodes[temp].push_back(parentGraphMappings[i]);
         }
     }
     //groupByGNodes = parentGraphMappings.GroupBy(x => x.Function.Values.ToArray(), MappingNodesComparer); //.ToDictionary(x => x.Key, x => x.ToArray(), MappingNodesComparer);

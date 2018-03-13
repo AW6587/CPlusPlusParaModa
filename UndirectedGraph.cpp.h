@@ -206,18 +206,19 @@ void UndirectedGraph<TVertex>::ClearAdjacentEdges(TVertex v)
 }
 
 template <class TVertex>
-bool UndirectedGraph<TVertex>::TryGetEdge(TVertex source, TVertex target, Edge<TVertex> *edge)
+bool UndirectedGraph<TVertex>::TryGetEdge(TVertex source, TVertex target, Edge<TVertex> edge)
 {
-	if(edges[source] != NULL)
-	{
-		if(contains(*edges[source], target))
-		{
-			edge->Source = source;
-			edge->Target = target;
-			return true;
-		}
-	}
-	return false;
+
+    vector<TVertex>* ends;
+    if(edges.count(source)) {
+        ends = edges[source];
+        if(find(ends->begin(), ends->end(), target) != ends->end()){
+            edge.Source = source;
+            edge.Target = target;
+            return true;
+        }
+    }
+    return false;
 }
 
 template <class TVertex>

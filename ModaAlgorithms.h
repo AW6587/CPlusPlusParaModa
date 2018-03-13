@@ -35,8 +35,10 @@ public:
     map<QueryGraph, vector<Mapping>> Algorithm1(UndirectedGraph<int> inputGraph, QueryGraph* qGraph, int subgraphSize, int thresholdValue);
 
     //Algorithm2
-    vector<Mapping> Algorithm2(QueryGraph* queryGraph, UndirectedGraph<int> inputGraphClone, int numberOfSamples, bool getInducedMappingsOnly);
+    vector<Mapping> Algorithm2(QueryGraph queryGraph, UndirectedGraph<int> inputGraphClone, int numberOfSamples, bool getInducedMappingsOnly);
 
+    //Algor2 modified
+    vector<Mapping> Algorithm2_Modified(QueryGraph queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly);
 private:
 
     ExpansionTreeBuilder<int> _builder;
@@ -54,8 +56,6 @@ private:
     //Get set
     static vector<Mapping> GetSet(map<vector<int>, vector<Mapping>> theMappings);
 
-    //Algorithm2 modified
-    vector<Mapping> Algorithm2_Modified(QueryGraph* queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly);
 };
 
 #endif /* ModaAlgorithms_h */

@@ -29,7 +29,7 @@ Mapping::Mapping(std::map<int, int> function, int subGraphEdgeCount)
 Edge<int> Mapping::GetImage(UndirectedGraph<int> inputGraph, Edge<int> newlyAddedEdge)
 {
 	Edge<int> image;
-	if (inputGraph.TryGetEdge(Function[newlyAddedEdge.Source], Function[newlyAddedEdge.Target], &image))
+	if (inputGraph.TryGetEdge(Function[newlyAddedEdge.Source], Function[newlyAddedEdge.Target], image))
 	{
 	    return image;
 	}
