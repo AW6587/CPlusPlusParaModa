@@ -653,21 +653,20 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
 /// <param name="expansionTree"></param>
 /// <returns></returns>
 //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree)
+QueryGraph* ModaAlgorithms::GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> & expansionTree)
 {
     ExpansionTreeNode qNode;
     qNode.QueryGraph = *queryGraph;
-    bool hasNode = expansionTree.ContainsVertex(qNode);
+    bool hasNode = expansionTree.ContainsVertex(qNode.QueryGraph);
     if (hasNode)
     {
         //NEED TO DO
 //        return expansionTree.Vertices.First(x => !x.IsRootNode && x.NodeName == queryGraph->Identifier).ParentNode.QueryGraph;
 
         //Find the first node with those condition
-        for (ExpansionTreeNode node : expansionTree.Vertices){
-            if(!node.IsRootNode && node.NodeName == queryGraph->Identifier){
-                QueryGraph* temp = new QueryGraph(node.ParentNode->QueryGraph.Identifier);
-                return temp;
+        for (auto & node : expansionTree.Vertices){
+            if(!node.IsRootNode && node.NodeName.compare(queryGraph->Identifier)){
+                return &(node.QueryGraph);
             }
         }
     }

@@ -46,7 +46,7 @@ private:
     static Edge<int> GetEdgeDifference(QueryGraph currentQueryGraph, QueryGraph parentQueryGraph, vector<Edge<int>> parentQueryGraphEdges);
 
     //Get Parent query node
-    QueryGraph* GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree);
+    QueryGraph* GetParent(QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> &expansionTree);
 
     //Algorithm 3
     static vector<Mapping> Algorithm3(map<QueryGraph, vector<Mapping>> *allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph* parentQueryGraph, string newFileName, string = "" );

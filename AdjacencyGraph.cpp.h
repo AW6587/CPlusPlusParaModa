@@ -55,6 +55,26 @@ bool AdjacencyGraph<TVertex>::ContainsVertex(TVertex v)
 }
 
 template <class TVertex>
+bool AdjacencyGraph<TVertex>::ContainsVertex(QueryGraph g)
+{
+	for(auto & kv : vertexEdges)
+	{
+		if(kv.first.QueryGraph == g)
+		{
+			return true;
+		}
+		for(auto & i : *kv.second)
+		{
+			if(i.Source.QueryGraph == g || i.Target.QueryGraph == g)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+template <class TVertex>
 bool AdjacencyGraph<TVertex>::IsOutEdgesEmpty(TVertex v)
 {
 	if(vertexEdges[v] != NULL)
@@ -217,6 +237,7 @@ bool AdjacencyGraph<TVertex>::AddVertex(TVertex v)
 	if(!exists(v))
 	{
 		VertexCount++;
+		Vertices.push_back(v);
 	}
 	if (ContainsVertex(v))
 	{

@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include "edge.h"
+#include "QueryGraph.h"
 using namespace std;
 
 template<class TVertex>
@@ -48,6 +49,8 @@ class AdjacencyGraph
 
 
         bool ContainsVertex(TVertex v);
+
+		bool ContainsVertex(QueryGraph g);
 
         bool IsOutEdgesEmpty(TVertex v);
 
