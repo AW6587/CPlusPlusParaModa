@@ -13,7 +13,8 @@ namespace GraphProcessor
 		vector<string> lines;
 
 		string line;
-		ifstream inFile (filename);
+		ifstream inFile;
+		inFile.open (filename, ifstream::in);
 		if (inFile.is_open())
 		{
 			while ( getline (inFile,line) )
@@ -21,7 +22,7 @@ namespace GraphProcessor
 				lines.push_back(line);
 			}
 			inFile.close();
-		};
+		}
 
 		clock_t timer = clock();
 		for(auto & line : lines)
