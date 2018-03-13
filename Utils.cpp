@@ -26,7 +26,6 @@ void clearVector(vector<Edge<int> > vect, int start, int end)
 
 MappingTestResult Utils::IsMappingCorrect(map<int, int> function, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly, int subGraphEdgeCount)
 {
-    //cout << inputGraph.EdgeCount() << endl
 	vector<int> functionValues;
     
 	for(auto & kv : function)
@@ -35,11 +34,10 @@ MappingTestResult Utils::IsMappingCorrect(map<int, int> function, vector<Edge<in
 	}
     
     UndirectedGraph<int>* subgraph = GetSubgraph(inputGraph, functionValues);
-    cout <<"Subgraph.edgecount"  << inputGraph.EdgeCount() << endl;
     return IsMappingCorrect2(function, *subgraph, queryGraphEdges, checkInducedMappingOnly);
 }
 
-MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGraph<int>& subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
+MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGraph<int> subgraph, vector<Edge<int>> queryGraphEdges, bool checkInducedMappingOnly)
 {
     
     // Gather the corresponding potential images of the parentQueryGraphEdges in the input graph
@@ -47,12 +45,9 @@ MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGra
     vector<Edge<int> > edgeImages;
     for (auto const & edge : queryGraphEdges)
     {
-        //Edge<int> x = queryGraphEdges[i];
-        //edgeImages.push_back(Edge<int>(function[x.Source], function[x.Target]));
             edgeImages.push_back(Edge<int>(function[edge.Source], function[edge.Target]));
     }
     
-    //cout << edgeImages.size() << endl;
     MappingTestResult result;
     result.SubgraphEdgeCount = subgraph.EdgeCount();
     
@@ -73,11 +68,11 @@ MappingTestResult Utils::IsMappingCorrect2(map<int, int> function, UndirectedGra
 
     // if mapping is possible (=> if compareEdgeCount >= 0)
     vector<int> subgraphDegrees = subgraph.GetReverseDegreeSequence();
-    cout << subgraphDegrees.size() << endl;
     int subgLen = int(subgraphDegrees.size());
     UndirectedGraph<int> testG;
     testG.AddVerticesAndEdgeRange(edgeImages);
     vector<int> testGdeg = testG.GetReverseDegreeSequence();
+    
     if (compareEdgeCount == 0)
     {
         // Same node count, same edge count
@@ -154,14 +149,11 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
         pValues.push_back(set.second);
     }
     
-    cout << "same: " << (partialMap.size() == queryGraph.VertexCount()) << endl;
     if (partialMap.size() == queryGraph.VertexCount())
     {
         map<int, int> function = partialMap;
-        cout << "Funtion.size: "<< function.size() << endl;
         
         MappingTestResult result = IsMappingCorrect(function, queryGraphEdges, inputGraph, getInducedMappingsOnly);
-        cout << "Is Mapping correct?: " << result.IsCorrectMapping << endl;
         if (result.IsCorrectMapping)
         {
             Mapping singleValue(function,result.SubgraphEdgeCount);
@@ -218,7 +210,6 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
                 newPartialMap[item.first] = item.second;
             }
             newPartialMap[m] = neighbourRange[i];
-            cout << newPartialMap.size()<< "," << partialMap.size() << endl;
             //cout << newPartialMap.size() << endl;
             //PASS
             
@@ -422,6 +413,7 @@ int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph
 
 bool Utils::CanSupport(QueryGraph queryGraph, int node_H, UndirectedGraph<int> inputGraph, int node_G)
 {
-
+    cout << inputGraph.GetDegree(node_G) << endl;
+    cout << queryGraph.GetDegree(node_H) << endl;
     return inputGraph.GetDegree(node_G) >= queryGraph.GetDegree(node_H);
 }

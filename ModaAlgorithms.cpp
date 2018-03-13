@@ -232,7 +232,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
             vector<Mapping> mappings;
             if (qGraph->IsTree(subgraphSize))
             {
-                if (UseModifiedGrochow)
+                if (!UseModifiedGrochow)
                 {
                     // Modified Mapping module - MODA and Grockow & Kellis
                     mappings = Algorithm2_Modified(*qGraph, inputGraph, numIterations, false);
@@ -243,8 +243,7 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                     // Mapping module - MODA and Grockow & Kellis.
                     UndirectedGraph<int>* inputGraphClone = new UndirectedGraph<int>(inputGraph);
                     
-                    mappings = Algorithm2(*qGraph, *inputGraphClone, numIterations, false);
-
+                    mappings = Algorithm2(*qGraph, *inputGraphClone, numIterations, true);
                     //Delete inputGraphClone
                     delete inputGraphClone;
                     inputGraphClone = nullptr;
@@ -256,7 +255,6 @@ map<QueryGraph, vector<Mapping>> ModaAlgorithms::Algorithm1(UndirectedGraph<int>
                 // This is part of Algo 3; but performance tweaks makes it more useful to get it here
                 QueryGraph* parentQueryGraph = GetParent(qGraph, _builder.ExpansionTree);
                 
-                //cout << "ParentQueryGraph name: " << parentQueryGraph->ToString() << endl;
                 
                 if (parentQueryGraph->IsTree(subgraphSize))
                 {
@@ -348,7 +346,6 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGrap
 
     int subgraphSize = queryGraph.VertexCount();
 
-    cout << "Calling Algo 2" << endl;
     for (int i = 0; i < inputGraphDegSeq.size(); i++)
     {
         int g = inputGraphDegSeq[i];
@@ -357,12 +354,10 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGrap
             int h = queryGraphVertices[j];
             if (helper.CanSupport(queryGraph, h, inputGraphClone, g))
             {
-//#region Can Support
-                //Remember: f(h) = g, so h is Domain and g is Range
+
                 map<int, int> f;
                 f[h] = g;
                 map<vector<int>, vector<Mapping>> mappings = helper.IsomorphicExtension(f, queryGraph, queryGraphEdges, inputGraphClone, getInducedMappingsOnly);
-                
                 f.clear();
                 if (mappings.size() > 0)
                 {
@@ -413,7 +408,6 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGrap
 vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph queryGraph, UndirectedGraph<int> inputGraph, int numberOfSamples, bool getInducedMappingsOnly)
 {
     if (numberOfSamples <= 0) numberOfSamples = inputGraph.VertexCount() / 3;
-    if (numberOfSamples <= 0) numberOfSamples = inputGraph.VertexCount();
     Utils helper;
     map<vector<int>, vector<Mapping>> theMappings;
     vector<int> inputGraphDegSeq = inputGraph.GetNodesSortedByDegree(numberOfSamples);
@@ -447,7 +441,6 @@ vector<Mapping> ModaAlgorithms::Algorithm2_Modified(QueryGraph queryGraph, Undir
                     
                     if (theMappings.count(item.first))
                     {
-                        //maps.AddRange(item.second);
                         maps.insert( maps.end(), item.second.begin(), item.second.end() );
                     }
                     else
@@ -497,9 +490,6 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
 
     cout << "START OF ALGO 3\n";
     cout << "-------------------------------------------\n";
-    cout << parentQueryGraph->Identifier << endl;
-    cout << fileName.empty() << endl;
-    cout << endl;
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     
