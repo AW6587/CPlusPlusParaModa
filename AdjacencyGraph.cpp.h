@@ -28,25 +28,25 @@ AdjacencyGraph<TVertex>::AdjacencyGraph(bool _allowParallelEdges, int _vertexCap
 	// {
 	// 	vertexEdges = new VertexEdgeDictionary<TVertex>(vertexCapacity, vertexComparer);
 	// }
-    // 	
+    //
     // else
 	// {
 	// 	vertexEdges = new VertexEdgeDictionary<TVertex>(vertexComparer);
 	// }
-        
+
     edgeCapacity = _edgeCapacity;
 }
 
 template <class TVertex>
 bool AdjacencyGraph<TVertex>::ContainsVertex(TVertex v)
 {
-	if(vertexEdges[v] != NULL)
+	if(vertexEdges[v] == nullptr)
 	{
-		return true;
+		return false;
 	}
 	else
 	{
-		return false;
+		return true;
 	}
 }
 
@@ -57,7 +57,7 @@ bool AdjacencyGraph<TVertex>::IsOutEdgesEmpty(TVertex v)
 	{
 		return vertexEdges[v]->size() == 0;
 	}
-	else 
+	else
 	{
 		return true;
 	}
@@ -113,7 +113,7 @@ Edge<TVertex> * AdjacencyGraph<TVertex>::OutEdge(TVertex v, int index)
 template <class TVertex>
 bool AdjacencyGraph<TVertex>::ContainsEdge(TVertex source, TVertex target)
 {
-	if(vertexEdges[source] == NULL) 
+	if(vertexEdges[source] == NULL)
 	{
 		return false;
 	}
@@ -130,7 +130,7 @@ bool AdjacencyGraph<TVertex>::ContainsEdge(TVertex source, TVertex target)
 template <class TVertex>
 bool AdjacencyGraph<TVertex>::ContainsEdge(Edge<TVertex> edge)
 {
-	if(vertexEdges[edge.Source] == NULL) 
+	if(vertexEdges[edge.Source] == NULL)
 	{
 		return false;
 	}
@@ -194,15 +194,15 @@ bool AdjacencyGraph<TVertex>::AddVertex(TVertex v)
 	{
 		return false;
 	}
-	if(edgeCount < edgeCapacity || edgeCapacity < 0)
+	if(EdgeCount < edgeCapacity || edgeCapacity < 0)
 	{
-		edgeCount++;
+		EdgeCount++;
 		if(vertexEdges[v] == NULL)
 		{
 			vertexEdges[v] = new vector<Edge<TVertex> >;
 		}
 	}
-	
+	VertexCount++;
 	return true;
 }
 
@@ -239,18 +239,17 @@ bool AdjacencyGraph<TVertex>::RemoveVertex(TVertex v)
     //     this.edgeCount -= edges.Count;
     //     edges.Clear();
     // }
-	
+
 	vector<Edge<TVertex> > edgeToRemove;
 	for(auto & kv : vertexEdges)
 	{
 		// this may be assuming above commented block is being used
 		// if(kv.first == v) continue;
-		
+
 		if(kv.second != NULL)
 		{
 			for(auto & edge : *kv.second)
 			{
-				cout << "here" << endl;
 				if (edge.Target == v)
 				{
 					edgeToRemove.push_back(edge);
@@ -270,7 +269,7 @@ bool AdjacencyGraph<TVertex>::RemoveVertex(TVertex v)
 			kv.second->erase(kv.second->begin() + indexOfEdge);
 			// this.OnEdgeRemoved(edge);
 		}
-		edgeCount -= edgeToRemove.size();
+		EdgeCount -= edgeToRemove.size();
 	}
 	vertexEdges.erase(v);
 	return true;
@@ -311,9 +310,15 @@ bool AdjacencyGraph<TVertex>::AddEdge(Edge<TVertex> e)
 		vertexEdges[e.Source] = new vector<Edge<TVertex> >;
 	}
 	vertexEdges[e.Source]->push_back(e);
-	edgeCount++;
+	EdgeCount++;
 
 	// this.OnEdgeAdded(e);
 
 return true;
+}
+
+template <class TVertex>
+int AdjacencyGraph<TVertex>::getEdgeCount()
+{
+	return EdgeCount;
 }

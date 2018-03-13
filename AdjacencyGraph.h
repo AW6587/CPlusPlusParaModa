@@ -8,13 +8,15 @@ using namespace std;
 template<class TVertex>
 class AdjacencyGraph
 {
-	private:
+	public:
 		bool isDirected = true;
 		bool allowParallelEdges;
 		map<TVertex, vector<Edge<TVertex> > *> vertexEdges;
-		int edgeCount = 0;
 		int edgeCapacity = -1;
-	public:
+		int EdgeCount = 0;
+
+		int getEdgeCount();
+
 		AdjacencyGraph();
 
         AdjacencyGraph(bool allowParallelEdges);
@@ -27,11 +29,11 @@ class AdjacencyGraph
         // public AdjacencyGraph(bool allowParallelEdges, int vertexCapacity, int edgeCapacity, IEqualityComparer<TVertex> vertexComparer);
 
         // AdjacencyGraph(
-        //     bool allowParallelEdges, 
-        //     int capacity, 
+        //     bool allowParallelEdges,
+        //     int capacity,
         //     int edgeCapacity,
         //     Func<int, VertexEdgeDictionary<TVertex> > vertexEdgesDictionaryFactory);
-			
+
 		bool IsDirected;
 
         bool AllowParallelEdges;
@@ -39,12 +41,12 @@ class AdjacencyGraph
         int EdgeCapacity;
 
         bool IsVerticesEmpty;
-		
+
         int VertexCount;
 
         vector<TVertex> Vertices;
 
-        
+
         bool ContainsVertex(TVertex v);
 
         bool IsOutEdgesEmpty(TVertex v);
@@ -69,7 +71,7 @@ class AdjacencyGraph
         /// Gets the edge count.
         /// </summary>
         /// <value>The edge count.</value>
-        int EdgeCount;
+
 
         // [ContractInvariantMethod]
         // void ObjectInvariant()
@@ -83,33 +85,33 @@ class AdjacencyGraph
         /// <value>The edges.</value>
         // virtual vector<Edge<TVertex>> Edges();
 
-        
+
         bool ContainsEdge(TVertex source, TVertex target);
-        
+
         bool ContainsEdge(Edge<TVertex> edge);
 
         bool TryGetEdge(
             TVertex source,
             TVertex target,
             Edge<TVertex> & edge);
-        
+
         bool TryGetEdges(
             TVertex source,
             TVertex target,
         	vector<Edge<TVertex> > & edges);
 
         bool AddVertex(TVertex v);
-		
+
         int AddVertexRange(vector<TVertex> vertices);
 
         // public event VertexAction<TVertex> VertexAdded;
-		
+
         // void OnVertexAdded(TVertex args);
 
         bool RemoveVertex(TVertex v);
-		
+
         // public event VertexAction<TVertex> VertexRemoved;
-        
+
 		// void OnVertexRemoved(TVertex args);
 
         // int RemoveVertexIf(VertexPredicate<TVertex> predicate);
@@ -143,7 +145,7 @@ class AdjacencyGraph
         // int RemoveEdgeIf(EdgePredicate<TVertex> predicate);
 
         void ClearOutEdges(TVertex v);
-		
+
         // int RemoveOutEdgeIf(TVertex v, EdgePredicate<TVertex> predicate);
 
         void TrimEdgeExcess();

@@ -50,7 +50,6 @@ vector<TVertex> UndirectedGraph<TVertex>::Vertices()
 	{
 		keys.push_back(kv.first);
 	}
-	cout << "returningA" << endl;
 	return keys;
 }
 

@@ -338,10 +338,8 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph* queryGraph, UndirectedGra
     //Do we really need to implement the mapping nodes comparer?
     vector<int> inputGraphDegSeq = inputGraphClone.GetNodesSortedByDegree(numberOfSamples);
 
-    cout << "IS SEG FAULT??" << endl;
     //we dont have vetices and edges in our querygraph?
     int* queryGraphVertices = &queryGraph->Vertices()[0];
-    cout << "IS SEG FAULT??" << endl;
     vector<Edge<int>> queryGraphEdges = queryGraph->Edges();
 
     int subgraphSize = queryGraph->VertexCount();

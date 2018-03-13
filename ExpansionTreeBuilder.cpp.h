@@ -37,11 +37,6 @@ vector<ExpansionTreeNode> ExpansionTreeBuilder<TVertex>::sortWithBFS(AdjacencyGr
 	q.push(root);
 	visitedNodes[root.NodeName] = true;
 
-	cout << endl;
-	cout << endl;
-	cout << endl;
-	cout << endl;
-
 	while(q.size() > 0)
 	{
 		ExpansionTreeNode current = q.front();
@@ -54,7 +49,6 @@ vector<ExpansionTreeNode> ExpansionTreeBuilder<TVertex>::sortWithBFS(AdjacencyGr
 
 		for(auto & edge : edges)
 		{
-			// cout << edge.Target.ToString() << endl;
 			if(visitedNodes[edge.Target.NodeName] != true)
 			{
 				q.push(edge.Target);
@@ -92,13 +86,13 @@ void ExpansionTreeBuilder<TVertex>::Build()
 			cerr << "Subgraph sizes below 3 and above 5 are not supported, unless you supply a query graph." << endl;
 	}
 
+
 	vector<ExpansionTreeNode> VerticesSortedVect = sortWithBFS(ExpansionTree, rootNode);
 	for(auto & i : VerticesSortedVect)
 	{
 		VerticesSorted.push(i);
 	}
 
-	int count = 1;
 	#ifdef DEBUG_EXPANSION_TREE
 	for(auto & i : VerticesSortedVect)
 	{
