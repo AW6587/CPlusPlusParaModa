@@ -505,6 +505,10 @@ vector<Mapping> ModaAlgorithms::GetSet(map<vector<int>, vector<Mapping>> theMapp
 //Algorithm 3
 
 vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allMappings, UndirectedGraph<int> inputGraph, QueryGraph* queryGraph, AdjacencyGraph<ExpansionTreeNode> expansionTree, QueryGraph* parentQueryGraph, string newFileName, string fileName){
+    
+    cout << "START OF ALGO 3\n";
+    cout << "-------------------------------------------\n";
+    
     newFileName = "";
     vector<Mapping> parentGraphMappings;
     Utils helper;
@@ -524,6 +528,7 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>*allM
         if(parentQueryGraph != nullptr) parentGraphMappings = parentQueryGraph->ReadMappingsFromFile(fileName);
     }
 
+    cout << "parent Graph Mappings size: " << parentGraphMappings.size() << endl;
     if (parentGraphMappings.size() == 0)
     {
         //Mapping[0]???
