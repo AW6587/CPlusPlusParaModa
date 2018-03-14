@@ -416,6 +416,7 @@ vector<Mapping> ModaAlgorithms::Algorithm2(QueryGraph queryGraph, UndirectedGrap
     //Console.WriteLine("Thread {0}:\tAlgorithm 2: All tasks completed. Number of mappings found: {1}.", threadName, toReturn.Count);
     cout << endl;
     cout << "Algorithm 2 : All tasks completed. Number of mappings found: " << toReturn.size() << endl;
+    cout << endl;
     return toReturn;
 }
 
@@ -574,7 +575,8 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>allMa
     for (auto const& set : groupByGNodes)
     {
         // function.value (= set of G nodes) are all same here. So build the subgraph here and pass it dowm
-        UndirectedGraph<int> subgraph = helper.GetSubgraph(inputGraph, set.first);
+        UndirectedGraph<int>* subgraph = helper.GetSubgraph(inputGraph, set.first);
+        //cout << subgraph->ToString() << endl;
         for (Mapping item : set.second)
         {
             item.Id = id++;
@@ -583,12 +585,11 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>allMa
             // if (f(u), f(v)) ϵ G and meets the conditions, add to list
             if (item.SubGraphEdgeCount == queryGraphEdgeCount)
             {
-                MappingTestResult isMapping = helper.IsMappingCorrect2(item.Function, subgraph, queryGraphEdges, true);
+                MappingTestResult isMapping = helper.IsMappingCorrect2(item.Function, *subgraph, queryGraphEdges, true);
                 if (isMapping.IsCorrectMapping)
                 {
                     list.push_back(item);
                 }
-                isMapping.~MappingTestResult();
             }
             else if (item.SubGraphEdgeCount > queryGraphEdgeCount)
             {
@@ -602,7 +603,8 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>allMa
                 }
             }
         }
-        
+        delete subgraph;
+        subgraph = nullptr;
     }
 
 
