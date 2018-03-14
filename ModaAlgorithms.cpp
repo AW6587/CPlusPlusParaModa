@@ -569,7 +569,6 @@ vector<Mapping> ModaAlgorithms::Algorithm3(map<QueryGraph, vector<Mapping>>allMa
             groupByGNodes[temp].push_back(parentGraphMappings[i]);
         }
     }
-    cout << "size:  "  << groupByGNodes.size() << endl;
     //groupByGNodes = parentGraphMappings.GroupBy(x => x.Function.Values.ToArray(), MappingNodesComparer); //.ToDictionary(x => x.Key, x => x.ToArray(), MappingNodesComparer);
 
     for (auto const& set : groupByGNodes)
