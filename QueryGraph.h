@@ -21,7 +21,7 @@ public:
 
     string WriteMappingsToFile(vector<Mapping> mappings);
 
-    void RemoveNonApplicableMappings(vector<Mapping> mappings, UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly = true);
+    void RemoveNonApplicableMappings(vector<Mapping> &mappings, UndirectedGraph<int> &inputGraph, bool checkInducedMappingOnly = true);
 
 	bool AddVerticesAndEdgeRange(vector<Edge<int> > edges);
 

@@ -7,6 +7,7 @@
 #include "UndirectedGraph.h"
 #include "Mapping.h"
 #include "QueryGraph.h"
+#include "Utils.h"
 
 using json = nlohmann::json;
 using namespace std;
@@ -146,10 +147,65 @@ string QueryGraph::WriteMappingsToFile(vector<Mapping> mappings)
 	return fileName.str();
 }
 
-void QueryGraph::RemoveNonApplicableMappings(vector<Mapping> mappings,
-	UndirectedGraph<int> inputGraph, bool checkInducedMappingOnly)
+void QueryGraph::RemoveNonApplicableMappings(vector<Mapping> &mappings,
+	UndirectedGraph<int> &inputGraph, bool checkInducedMappingOnly)
 {
-	//TODO: finish this
+	if (mappings.size() < 2)
+	{
+		return;
+	}
+
+	int subgraphSize = VertexCount();
+	// var mapGroups = mappings.GroupBy(x => x.Function.Values, ModaAlgorithms.MappingNodesComparer); //.ToDictionary(x => x.Key, x => x.ToArray());
+	map<vector<int>, vector<Mapping>> mapGroups;
+	for (int i = 0; i < mappings.size();i++) {
+		vector<int> temp;
+		for(auto const& item : mappings[i].Function){
+			temp.push_back(item.second);
+			mapGroups[temp].push_back(mappings[i]);
+		}
+	}
+
+	vector<Mapping> toAdd;
+	vector<Edge<int> > queryGraphEdges = Edges();
+	for (auto & group : mapGroups)
+	{
+		vector<int> g_nodes = group.first; // Remember, f(h) = g, so .Values is for g's
+		// Try to get all the edges in the induced subgraph made up of these g_nodes
+		vector<Edge<int> > inducedSubGraphEdges;
+		for (int i = 0; i < subgraphSize - 1; i++)
+		{
+			for (int j = (i + 1); j < subgraphSize; j++)
+			{
+				Edge<int> edge_g;
+				if (inputGraph.TryGetEdge(g_nodes[i], g_nodes[j], edge_g))
+				{
+					inducedSubGraphEdges.push_back(edge_g);
+				}
+			}
+		}
+
+		UndirectedGraph<int> subgraph;
+		subgraph.AddVerticesAndEdgeRange(inducedSubGraphEdges);
+		for (auto & item : group.second)
+		{
+			MappingTestResult result = Utils::IsMappingCorrect2(item.Function, subgraph, queryGraphEdges, checkInducedMappingOnly);
+			if (result.IsCorrectMapping)
+			{
+				toAdd.push_back(item);
+				break;
+			}
+		}
+	}
+
+	if (toAdd.size() > 0)
+	{
+		for (auto & item : toAdd)
+		{
+			mappings.push_back(item);
+		}
+	}
+
 }
 
 bool QueryGraph::AddVerticesAndEdgeRange(vector<Edge<int> > edges)
