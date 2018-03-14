@@ -13,9 +13,9 @@ public:
 
     QueryGraph(string label, bool allowParralelEdges);
 
-    bool IsComplete(int subgraphSize = -1);
+    bool IsComplete(int& subgraphSize);
 
-    bool IsTree(int subgraphSize = -1);
+    bool IsTree(int& subgraphSize);
 
     vector<Mapping> ReadMappingsFromFile(string filename);
 

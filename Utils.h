@@ -36,5 +36,5 @@ public:
     
     static vector<int> ChooseNeighboursOfRange(vector<int> usedRange, UndirectedGraph<int> inputGraph);
     
-    static int GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph);
+    static int GetMostConstrainedNeighbour(vector<int> domain, QueryGraph& queryGraph);
 };

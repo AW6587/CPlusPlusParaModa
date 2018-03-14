@@ -140,9 +140,12 @@ UndirectedGraph<int>* Utils::GetSubgraph(UndirectedGraph<int> inputGraph, vector
 map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> partialMap, QueryGraph queryGraph, vector<Edge<int> > queryGraphEdges, UndirectedGraph<int> inputGraph, bool getInducedMappingsOnly)
 {
     
+    //declaration
     map<vector<int>,vector<Mapping>> listOfIsomorphisms;
     vector<int> pValues;
     vector<int> pKeys;
+    
+    
     for (auto const& set : partialMap)
     {
         pKeys.push_back(set.first);
@@ -174,7 +177,7 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
     int m = GetMostConstrainedNeighbour(pKeys, queryGraph);
     //cout << m << endl;
     //PASS
-    
+    //cout << m << endl;
     
     
     if (m < 0){
@@ -189,7 +192,7 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
     //PASS
     
     vector<int> neighborsOfM = queryGraph.GetNeighbors(m);
-    //cout << neighborsOfM.size() << endl;
+    //cout << "neighobors of m: " << neighborsOfM.size() <<  ": " << m << endl;
     //PASS
     
     int newPartialMapCount = partialMap.size() + 1;
@@ -207,7 +210,7 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
             
             for (auto & item : partialMap)
             {
-                newPartialMap[item.first] = item.second;
+                newPartialMap.emplace(item.first, item.second);
             }
             newPartialMap[m] = neighbourRange[i];
             //cout << newPartialMap.size() << endl;
@@ -221,6 +224,7 @@ map<vector<int>, vector<Mapping> > Utils::IsomorphicExtension(map<int, int> part
             {
                 for (auto & item : subList)
                 {
+                    //cout << "value size: " << item.second.size() << endl;
                     if (item.second.size() > 1)
                     {
                         queryGraph.RemoveNonApplicableMappings(item.second, inputGraph, getInducedMappingsOnly);
@@ -338,20 +342,17 @@ bool Utils::IsNeighbourIncompatible(UndirectedGraph<int> inputGraph, int n, map<
             {
                 val = partialMap[d];
             }else{
-                neighborsOfM.clear();
                 return false;
             }
             
             if (Contains(neighboursOfN, val))
             {
-                neighborsOfM.clear();
                 return true;
             }
 
         }
         
     }
-    neighborsOfM.clear();
     return false;
 }
 
@@ -367,8 +368,7 @@ vector<int> Utils:: ChooseNeighboursOfRange(vector<int> usedRange, UndirectedGra
         {
             for (auto & loc : local)
             {
-                //if (!usedRangeSet.Contains(loc))
-                if (!Contains(usedRange, loc))
+                if (find(usedRange.begin(), usedRange.end(), loc) == usedRange.end())
                 {
                     toReturn.push_back(loc);
                 }
@@ -379,11 +379,10 @@ vector<int> Utils:: ChooseNeighboursOfRange(vector<int> usedRange, UndirectedGra
             break;
         }
     }
-    //usedRangeSet = null;
     return toReturn;
 }
 
-int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph)
+int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph& queryGraph)
 {
     /*
      * As is standard in backtracking searches, the algorithm uses the most constrained neighbor
@@ -393,15 +392,14 @@ int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph
      * the highest degree and largest neighbor degree sequence.
      * */
     //var domainDict = new HashSet<int>(domain);
-    for(auto dom : domain) //domainDict)
+    for(auto & dom : domain) //domainDict)
     {
         auto local = queryGraph.GetNeighbors(dom);
         if (local.size() > 0)
         {
             for (auto & loc : local)
             {
-                //if (!domainDict.Contains(loc))
-                if (!Contains(domain, loc))
+                if (find(domain.begin(), domain.end(), loc) == domain.end())
                 {
                     return loc;
                 }
@@ -413,7 +411,5 @@ int Utils::GetMostConstrainedNeighbour(vector<int> domain, QueryGraph queryGraph
 
 bool Utils::CanSupport(QueryGraph queryGraph, int node_H, UndirectedGraph<int> inputGraph, int node_G)
 {
-    cout << inputGraph.GetDegree(node_G) << endl;
-    cout << queryGraph.GetDegree(node_H) << endl;
     return inputGraph.GetDegree(node_G) >= queryGraph.GetDegree(node_H);
 }

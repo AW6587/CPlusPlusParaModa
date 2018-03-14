@@ -23,7 +23,7 @@ QueryGraph::QueryGraph(string label, bool allowParralelEdges) : UndirectedGraph<
 }
 
 //subgraphSize defaults to -1
-bool QueryGraph::IsComplete(int subgraphSize)
+bool QueryGraph::IsComplete(int& subgraphSize)
 {
 	if (subgraphSize <= 1)
 	{
@@ -33,7 +33,7 @@ bool QueryGraph::IsComplete(int subgraphSize)
 }
 
 //subgraphSize defaults to -1
-bool QueryGraph::IsTree(int subgraphSize)
+bool QueryGraph::IsTree(int& subgraphSize)
 {
 	if (subgraphSize <= 1)
 	{
