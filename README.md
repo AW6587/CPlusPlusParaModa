@@ -17,18 +17,19 @@ Outputs are then reused in subsequent searches to speed up the searching time. A
   
 The algorithm is described as such:
 
-  **Input:** Graph _**G**_ and a query graph _**H**_ <br/>
-  **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
-  Start with an empty set of instances <br/>
-  Order the nodes of _**G**_ by increasing degree and then by increasing neighbor degree sequence <br/>
-  **Pick any node _h_ from _H_** <br/>
-  **for** each node _**g**_ of _**G**_ **do** <br/>
-    **for** each node _**h**_ of _**H**_ such that _**g**_ can support _**h**_ **do** <br/>
-      Let _**f**_ be the partial map associating _**f(h) = g**_ <br/>
-      Find all isomorphic extensions of _**f**_ <br/>
-      (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
-      Add the images of these maps to the set of all instances <br/>
-  **Return** the set of all instances (Mbadiwe, Kim)
+    **Input:** Graph _**G**_ and a query graph _**H**_ <br/>
+    **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
+
+    Start with an empty set of instances <br/>
+    Order the nodes of _**G**_ by increasing degree and then by increasing neighbor degree sequence <br/>
+    **Pick any node _h_ from _H_** <br/>
+    **for** each node _**g**_ of _**G**_ **do** <br/>
+        **for** each node _**h**_ of _**H**_ such that _**g**_ can support _**h**_ **do** <br/>
+            Let _**f**_ be the partial map associating _**f(h) = g**_ <br/>
+            Find all isomorphic extensions of _**f**_ <br/>
+            (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
+            Add the images of these maps to the set of all instances <br/>
+    **Return** the set of all instances (Mbadiwe, Kim)
   
 ParaMODA is a robust program and we were unable to implement it in its entirety due to timing constraints. By running the original implementation in C#, with the first provided test, we mapped the the file dependencies used. 
 
@@ -74,7 +75,7 @@ ParaMODA is a complex program with a lot of interdependencies. This project prov
 - Memory leaks
 - Building and running the final product
 
-These experiences are valuable to us and benefits us once we go to workplace with large projects.
+These experiences are valuable to us and benefit us once we go to a workplace with large projects.
 
 ## Future Works
 Due to timing restrictions, these are the things that should be continued. The Utils.IsomorphicExtension returns incorrect output which in storing the mapping into a queryGraph. More work will need to be done to ensure an correct output. All output is also limited to the command line. A Graphic User Interface would greatly improve the usability of our project. We’ve also considered investigating the possibility of implementing it as a website which would broaden the usability in an area that does not currently exist. The feasibility of such an implementation and reliable user access is unknown at this moment.
