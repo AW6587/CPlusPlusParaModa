@@ -15,18 +15,18 @@ ParaMODA motif-centric approach searches for specific subgraph patterns in a par
   
 Outputs are then reused in subsequent searches to speed up the searching time. Additional work is simplified by sampling only a subset of nodes in a give network, removing the need to find all mappings. ParaMODA’s subgraph selection utilizes isomorphic testing by determining if a graph has a specific set of invariants, which are properties inherent to a graph structure.
   
-The algorithm is described as such:
-  **Input:** Graph _G_ and a query graph _H_ 
-  **Output:** A set of all instances of _H_ in _G_ 
-  Start with an empty set of instances
-  Order the nodes of _G_ by increasing degree and then by increasing neighbor degree sequence
-  **Pick any node _h_ from _H_** 
-  **for** each node _g_ of _G_ **do**
-    **for** each node _h_ of _H_ such that _g_ can support _h_ **do**
-      Let _f_ be the partial map associating _f(h) = g_
-      Find all isomorphic extensions of _f_
-      (i.e. call IsomorphicExtensions(_f,H,G_))
-      Add the images of these maps to the set of all instances
+The algorithm is described as such:<br/>
+  **Input:** Graph _G_ and a query graph _H_ <br/>
+  **Output:** A set of all instances of _H_ in _G_ <br/>
+  Start with an empty set of instances <br/>
+  Order the nodes of _G_ by increasing degree and then by increasing neighbor degree sequence <br/>
+  **Pick any node _h_ from _H_** <br/>
+  **for** each node _g_ of _G_ **do** <br/>
+    **for** each node _h_ of _H_ such that _g_ can support _h_ **do** <br/>
+      Let _f_ be the partial map associating _f(h) = g_ <br/>
+      Find all isomorphic extensions of _f_ <br/>
+      (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
+      Add the images of these maps to the set of all instances <br/>
   **Return** the set of all instances (Mbadiwe, Kim)
   
 ParaMODA is a robust program and we were unable to implement it in its entirety due to timing constraints. By running the original implementation in C#, with the first provided test, we mapped the the file dependencies used. 
@@ -66,7 +66,7 @@ ParaMODA is a complex program with a lot of interdependencies. This project prov
 - Translating c# into c++(finding a way to deal with syntax difference)
 - Check syntax, dependencies and other errors
 - Memory leaks
-- Building and running the final product
+- Building and running the final product <br/>
 These experiences are valuable to us and benefits us once we go to workplace with large projects.
 
 ## Future Works
