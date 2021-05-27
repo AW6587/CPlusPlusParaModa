@@ -1,4 +1,4 @@
-ParaMODA in C++ 
+# ParaMODA in C++ 
 
 ## Introduction
 Protein to protein interactions (PPI) are contacts between two or more protein molecules, due to biochemical events, forming large networks. These networks can be represented as graphs. A recurrent, statistically significant subgraph of the larger network, is called a network motif. Motifs are of interest to many researchers as they may reveal functional properties of their structures. Discovering such motifs is computationally intensive and many computer algorithms have been proposed to solve this challenging problem. 
@@ -15,16 +15,17 @@ ParaMODA motif-centric approach searches for specific subgraph patterns in a par
   
 Outputs are then reused in subsequent searches to speed up the searching time. Additional work is simplified by sampling only a subset of nodes in a give network, removing the need to find all mappings. ParaMODA’s subgraph selection utilizes isomorphic testing by determining if a graph has a specific set of invariants, which are properties inherent to a graph structure.
   
-The algorithm is described as such:<br/>
-  **Input:** Graph _G_ and a query graph _H_ <br/>
-  **Output:** A set of all instances of _H_ in _G_ <br/>
+The algorithm is described as such:
+
+  **Input:** Graph _**G**_ and a query graph _**H**_ <br/>
+  **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
   Start with an empty set of instances <br/>
-  Order the nodes of _G_ by increasing degree and then by increasing neighbor degree sequence <br/>
+  Order the nodes of _**G**_ by increasing degree and then by increasing neighbor degree sequence <br/>
   **Pick any node _h_ from _H_** <br/>
-  **for** each node _g_ of _G_ **do** <br/>
-    **for** each node _h_ of _H_ such that _g_ can support _h_ **do** <br/>
-      Let _f_ be the partial map associating _f(h) = g_ <br/>
-      Find all isomorphic extensions of _f_ <br/>
+  **for** each node _**g**_ of _**G**_ **do** <br/>
+    **for** each node _**h**_ of _**H**_ such that _**g**_ can support _**h**_ **do** <br/>
+      Let _**f**_ be the partial map associating _**f(h) = g**_ <br/>
+      Find all isomorphic extensions of _**f**_ <br/>
       (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
       Add the images of these maps to the set of all instances <br/>
   **Return** the set of all instances (Mbadiwe, Kim)
@@ -46,15 +47,20 @@ To test comparable results, our program uses the same dataset (SampleInputGraph.
 The C# ParaMODA implementation used json to store some data. For our implementation we found a open source json library for C++ for this. https://github.com/nlohmann/json
 
 Figure 1 and 2 demonstrate our sample input for a size 5 graph: 
+
 ![image](https://user-images.githubusercontent.com/36549707/119889626-0b8cb300-bef4-11eb-8582-009f14887a58.png)
+
 ![image](https://user-images.githubusercontent.com/36549707/119889715-2b23db80-bef4-11eb-8e16-d423ac6df0ec.png)
 
 ## Testing and Results
 We compared the results of the original program to our own. Figure 3 shows the output of the original ParaMODA in C# with a size 5 graph on a Lenovo ThinkPad Yoga 260 with Windows 10 and using Visual Studio 2017: 
+
 ![image](https://user-images.githubusercontent.com/36549707/119890269-db91df80-bef4-11eb-90b5-a13cf5d9f529.png)
  
 Our project includes a “makefile” which simplified the testing process. To test our implementation in a Linux command line, from the files directory enter “make all” which will run the program. We initially programmed and tested in a Mac Unix environment. Final testing was done on the UWB servers which required us to make some alterations to the “makefile”. In figure 4, we show the test output from our ParaMODA in C++ of a size 4 and size 5 graph
+
 ![image](https://user-images.githubusercontent.com/36549707/119890324-ec425580-bef4-11eb-909e-0fbbfbf00ff0.png) 
+
 ![image](https://user-images.githubusercontent.com/36549707/119890361-f9f7db00-bef4-11eb-9786-8917723e98e2.png)
  
 After testing our output, we consistently got wrong results. We believe the problem lies in the file Utils.cpp under IsomorphicExtension. 
@@ -66,7 +72,8 @@ ParaMODA is a complex program with a lot of interdependencies. This project prov
 - Translating c# into c++(finding a way to deal with syntax difference)
 - Check syntax, dependencies and other errors
 - Memory leaks
-- Building and running the final product <br/>
+- Building and running the final product
+
 These experiences are valuable to us and benefits us once we go to workplace with large projects.
 
 ## Future Works
