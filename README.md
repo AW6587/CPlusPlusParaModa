@@ -17,7 +17,7 @@ Outputs are then reused in subsequent searches to speed up the searching time. A
   
 The algorithm is described as such:
 
-    <b>Input:</b> Graph _**G**_ and a query graph _**H**_ <br/>
+    <code><b>Input:</b> Graph _**G**_ and a query graph _**H**_ <br/>
     **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
 
     Start with an empty set of instances <br/>
@@ -29,7 +29,7 @@ The algorithm is described as such:
             Find all isomorphic extensions of _**f**_ <br/>
             (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
             Add the images of these maps to the set of all instances <br/>
-    **Return** the set of all instances (Mbadiwe, Kim)
+    **Return** the set of all instances (Mbadiwe, Kim)</code>
   
 ParaMODA is a robust program and we were unable to implement it in its entirety due to timing constraints. By running the original implementation in C#, with the first provided test, we mapped the the file dependencies used. 
 
