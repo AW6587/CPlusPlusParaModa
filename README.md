@@ -17,7 +17,7 @@ Outputs are then reused in subsequent searches to speed up the searching time. A
   
 The algorithm is described as such:
 
-    **Input:** Graph _**G**_ and a query graph _**H**_ <br/>
+    <b>Input:</b> Graph _**G**_ and a query graph _**H**_ <br/>
     **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
 
     Start with an empty set of instances <br/>
