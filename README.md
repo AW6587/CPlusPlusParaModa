@@ -17,20 +17,20 @@ Outputs are then reused in subsequent searches to speed up the searching time. A
   
 The algorithm is described as such:
 
-    <pre><code><b>Input:</b> Graph _**G**_ and a query graph _**H**_ <br/>
-    **Output:** A set of all instances of _**H**_ in _**G**_ <br/>
+<pre><code><b>Input:</b>  Graph <b><i>G</i></b> and a query graph <b><i>H</i></b> <br/>
+<b>Output:</b>  A set of all instances of <b><i>H</i></b> in <b><i>G</i></b> <br/>
 
-    Start with an empty set of instances <br/>
-    Order the nodes of _**G**_ by increasing degree and then by increasing neighbor degree sequence <br/>
-    **Pick any node _h_ from _H_** <br/>
-    **for** each node _**g**_ of _**G**_ **do** <br/>
-        **for** each node _**h**_ of _**H**_ such that _**g**_ can support _**h**_ **do** <br/>
-            Let _**f**_ be the partial map associating _**f(h) = g**_ <br/>
-            Find all isomorphic extensions of _**f**_ <br/>
-            (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
-            Add the images of these maps to the set of all instances <br/>
-    **Return** the set of all instances (Mbadiwe, Kim)</code></pre>
-  
+Start with an empty set of instances <br/>
+Order the nodes of <b><i>G</i></b> by increasing degree and then by increasing neighbor degree sequence <br/>
+<b>Pick any node <i>h</i> from <i>H</i></b> <br/>
+<b>for</b> each node <b><i>g</i></b> of <b><i>G</i></b> <b>do</b> <br/>
+    <b>for</b> each node <b><i>h</i></b> of <b><i>H</i></b> such that <b><i>g</i></b> can support <b><i>h</i></b> <b>do</b> <br/>
+        Let <b><i>f</i></b> be the partial map associating <b><i>f(h) = g</i></b> <br/>
+        Find all isomorphic extensions of <b><i>f</i></b> <br/>
+        (i.e. call IsomorphicExtensions(_f,H,G_)) <br/>
+        Add the images of these maps to the set of all instances <br/>
+<b>Return</b> the set of all instances (Mbadiwe, Kim)</code></pre>
+
 ParaMODA is a robust program and we were unable to implement it in its entirety due to timing constraints. By running the original implementation in C#, with the first provided test, we mapped the the file dependencies used. 
 
 As detailed in ParaMODA’s documentation, the original C# code has five major methods:
@@ -82,8 +82,8 @@ Due to timing restrictions, these are the things that should be continued. The U
 
 ## Works Cited
 
-Mbadiwe, Somadina, and Wooyoung Kim. “ParaMODA: Improving Motif-Centric Subgraph Pattern Search in PPI Networks.” 2017 IEEE International Conference on Bioinformatics and Biomedicine (BIBM), 2017, doi:10.1109/bibm.2017.8217920.
+Mbadiwe, Somadina, and Wooyoung Kim. “ParaMODA: Improving Motif-Centric Subgraph Pattern Search in PPI Networks.” _2017 IEEE International Conference on Bioinformatics and Biomedicine (BIBM)_, 2017, doi:10.1109/bibm.2017.8217920
 
-“Smbadiwe/ParaMODA.” GitHub, github.com/smbadiwe/ParaMODA.
+“Smbadiwe/ParaMODA.” _GitHub_, https://github.com/smbadiwe/ParaMODA
 
 
